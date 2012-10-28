@@ -42,7 +42,6 @@ import android.util.Pair;
 
 import com.android.common.contacts.DataUsageStatUpdater;
 import com.android.common.userhappiness.UserHappinessSignals;
-import com.android.mms.ContentRestrictionException;
 import com.android.mms.ExceedMessageSizeException;
 import com.android.mms.LogTag;
 import com.android.mms.MmsApp;
@@ -1028,10 +1027,8 @@ public class WorkingMessage {
 
         mConversation = conv;
 
-        Context context = mActivity;
-
         // Convert to MMS if there are any email addresses or multiple recipients in the recipient list.
-        if (conv.getRecipients().size() > 1 && MessagingPreferenceActivity.getGroupMMSEnabled(context)) {
+        if (conv.getRecipients().size() > 1 && MessagingPreferenceActivity.getGroupMMSEnabled(mActivity)) {
             setGroupTextMms(true, false);
         } else {
             setHasEmail(conv.getRecipients().containsEmail(), false);
