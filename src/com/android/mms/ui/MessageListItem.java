@@ -200,6 +200,15 @@ public class MessageListItem extends LinearLayout implements
         return mMessageItem;
     }
 
+    public void setSenderViewVisibility(String msgItem) {
+      if (msgItem.equals("mms")) {
+        mBodySenderView.setText(mMessageItem.mContact + ":");
+        mBodySenderView.setVisibility(View.VISIBLE);
+      } else {
+        mBodySenderView.setVisibility(View.GONE);
+      }
+    }
+
     public void setMsgListItemHandler(Handler handler) {
         mHandler = handler;
     }
@@ -211,12 +220,7 @@ public class MessageListItem extends LinearLayout implements
                                 + String.valueOf((mMessageItem.mMessageSize + 1023) / 1024)
                                 + mContext.getString(R.string.kilobyte);
 
-        if (mMessageItem.mType.equals("mms")) {
-            mBodySenderView.setText(mMessageItem.mContact + ":");
-            mBodySenderView.setVisibility(View.VISIBLE);
-        } else {
-            mBodySenderView.setVisibility(View.GONE);
-        }
+        setSenderViewVisibility(mMessageItem.mType);
 
         mBodyTextView.setText(formatMessage(mMessageItem, mMessageItem.mContact, null,
                                             mMessageItem.mSubject,
@@ -328,12 +332,7 @@ public class MessageListItem extends LinearLayout implements
         }
         mBodyTextView.setText(formattedMessage);
 
-        if (mMessageItem.mType.equals("mms")) {
-            mBodySenderView.setText(mMessageItem.mContact + ":");
-            mBodySenderView.setVisibility(View.VISIBLE);
-        } else {
-            mBodySenderView.setVisibility(View.GONE);
-        }
+        setSenderViewVisibility(mMessageItem.mType);
 
         // Debugging code to put the URI of the image attachment in the body of the list item.
         if (DEBUG) {

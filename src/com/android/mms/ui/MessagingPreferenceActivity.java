@@ -60,7 +60,7 @@ public class MessagingPreferenceActivity extends PreferenceActivity
     public static final String SMS_DELIVERY_REPORT_MODE = "pref_key_sms_delivery_reports";
     public static final String SMS_SPLIT_COUNTER        = "pref_key_sms_split_counter";
     public static final String NOTIFICATION_ENABLED     = "pref_key_enable_notifications";
-    public static final String GROUP_MMS_ENABLED    = "pref_key_mms_group_mms";
+    public static final String GROUP_MMS_ENABLED        = "pref_key_mms_group_mms";
     public static final String NOTIFICATION_VIBRATE     = "pref_key_vibrate";
     public static final String NOTIFICATION_VIBRATE_WHEN= "pref_key_vibrateWhen";
     public static final String NOTIFICATION_RINGTONE    = "pref_key_ringtone";
@@ -370,9 +370,6 @@ public class MessagingPreferenceActivity extends PreferenceActivity
             // Update the actual "enable notifications" value that is stored in secure settings.
             enableNotifications(mEnableNotificationsPref.isChecked(), this);
 
-        } else if (preference == mMmsGroupMmsPref) {
-            enableGroupMMS(mMmsGroupMmsPref.isChecked(), this);
-
         } else if (preference == mEnableQuickMessagePref) {
             // Update the actual "enable quickmessage" value that is stored in secure settings.
             enableQuickMessage(mEnableQuickMessagePref.isChecked(), this);
@@ -510,17 +507,8 @@ public class MessagingPreferenceActivity extends PreferenceActivity
 
     public static boolean getGroupMMSEnabled(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean groupMMSEnabled = prefs.getBoolean(MessagingPreferenceActivity.GROUP_MMS_ENABLED, true);
+        boolean groupMMSEnabled = prefs.getBoolean(MessagingPreferenceActivity.GROUP_MMS_ENABLED, false);
         return groupMMSEnabled;
-    }
-
-    public static void enableGroupMMS(boolean enabled, Context context) {
-        // Store the value of GroupMMS in SharedPreferences
-        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
-
-        editor.putBoolean(MessagingPreferenceActivity.GROUP_MMS_ENABLED, enabled);
-
-        editor.apply();
     }
 
     private void registerListeners() {

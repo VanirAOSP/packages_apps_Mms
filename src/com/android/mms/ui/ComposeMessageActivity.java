@@ -760,11 +760,9 @@ public class ComposeMessageActivity extends Activity
                 return;
             }
 
-            Context context = ComposeMessageActivity.this;
-
             mWorkingMessage.setWorkingRecipients(mRecipientsEditor.getNumbers());
 
-            if (recipientCount() > 1 && MessagingPreferenceActivity.getGroupMMSEnabled(context)) {
+            if (recipientCount() > 1 && MessagingPreferenceActivity.getGroupMMSEnabled(ComposeMessageActivity.this)) {
                 mWorkingMessage.setGroupTextMms(recipientCount() > 1, true);
             } else {
                 mWorkingMessage.setHasEmail(mRecipientsEditor.containsEmail(), true);
@@ -2269,13 +2267,6 @@ public class ComposeMessageActivity extends Activity
         mConversation.blockMarkAsRead(false);
 
         if (mMsgListAdapter != null) {
-            // Close the cursor in the ListAdapter if the activity stopped.
-            Cursor cursor = mMsgListAdapter.getCursor();
-
-            if (cursor != null && !cursor.isClosed()) {
-                cursor.close();
-            }
-
             mMsgListAdapter.changeCursor(null);
             mMsgListAdapter.cancelBackgroundLoading();
         }

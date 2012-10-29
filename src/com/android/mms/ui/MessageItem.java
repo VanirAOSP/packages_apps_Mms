@@ -23,7 +23,9 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.provider.Telephony.Mms;
+import static android.provider.Telephony.Mms.Addr.*;
 import android.provider.Telephony.MmsSms;
 import android.provider.Telephony.Sms;
 import android.text.TextUtils;
@@ -68,6 +70,15 @@ public class MessageItem {
     final String mType;
     final long mMsgId;
     final int mBoxId;
+
+    final String[] MMS_SENDER_PROJECTION =  new String[] {
+        ADDRESS,
+        CONTACT_ID,
+        CHARSET,
+        TYPE
+    };
+
+    final String MMS_SENDER_SELECTION = TYPE + "=" + com.google.android.mms.pdu.PduHeaders.FROM;
 
     DeliveryStatus mDeliveryStatus;
     boolean mReadReport;
@@ -163,7 +174,7 @@ public class MessageItem {
                 }
                 mTimestamp = MessageUtils.formatTimeStampString(context, date, mFullTimestamp);
             }
-            mContact = Contact.get(getMmsSender(mMsgId, mContext), false).getName();
+            new MmsSenderQueryTask(mMsgId, mContext).execute();
             mLocked = cursor.getInt(columnsMap.mColumnSmsLocked) != 0;
             mErrorCode = cursor.getInt(columnsMap.mColumnSmsErrorCode);
         } else if ("mms".equals(type)) {
@@ -186,7 +197,7 @@ public class MessageItem {
             mBody = null;
             mMessageSize = 0;
             mTextContentType = null;
-            mTimestamp = ""; // Initialze the timestamp to "" instead of null
+            mTimestamp = null;
             mMmsStatus = cursor.getInt(columnsMap.mColumnMmsStatus);
 
             // Start an async load of the pdu. If the pdu is already loaded, the callback
@@ -203,24 +214,37 @@ public class MessageItem {
     }
 
     // Function to query the sender's address from db
-    private String getMmsSender(long msgId, Context context) {
-        String sender="";
-        final String[] projection =  new String[] { "address", "contact_id", "charset", "type" };
-        final String selection = "type=137"; // "type="+ PduHeaders.FROM,
+    private class MmsSenderQueryTask extends AsyncTask<Void, Void, String> {
+        private long mMsgId;
+        private Context mContext;
 
-        Uri.Builder builder = Uri.parse("content://mms").buildUpon();
-        builder.appendPath(String.valueOf(msgId)).appendPath("addr");
-
-        Cursor cursor = context.getContentResolver().query(
-            builder.build(),
-            projection,
-            selection,
-            null, null);
-
-        if (cursor.moveToFirst()) {
-            sender =  cursor.getString(0);
+        public MmsSenderQueryTask(long mMsgId, Context mContext) {
+            this.mMsgId = mMsgId;
+            this.mContext = mContext;
         }
-        return sender;
+
+        protected String doInBackground(Void... params) {
+            String sender="";
+
+            Uri.Builder builder = android.provider.Telephony.Mms.CONTENT_URI.buildUpon();
+            builder.appendPath(String.valueOf(mMsgId)).appendPath("addr");
+
+            Cursor cursor = mContext.getContentResolver().query(
+                builder.build(),
+                MMS_SENDER_PROJECTION,
+                MMS_SENDER_SELECTION,
+                null, null);
+
+            if (cursor.moveToFirst()) {
+                sender =  cursor.getString(0);
+            }
+            cursor.close();
+            return Contact.get(sender, false).getName();
+        }
+
+        protected void onPostExecute(String contact) {
+            mContact = contact;
+        }
     }
 
     private void interpretFrom(EncodedStringValue from, Uri messageUri) {
