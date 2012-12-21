@@ -309,9 +309,10 @@
         </service>
 
         <provider android:name="TempFileProvider"
-                  android:exported="true"
                   android:authorities="mms_temp_file"
-                  android:multiprocess="true" />
+                  android:multiprocess="true"
+                  android:exported="true" />
+
 
         <activity android:name=".ui.MiniPreferenceActivity" >
             <intent-filter>
