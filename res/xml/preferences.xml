@@ -50,7 +50,7 @@
 
     <!-- SMS Settings -->
     <PreferenceCategory android:title="@string/pref_sms_settings_title"
-        android:key="pref_key_sms_settings" >
+        android:key="pref_key_sms_settings">
 
         <CheckBoxPreference
             android:defaultValue="false"
@@ -74,7 +74,7 @@
     <PreferenceCategory android:title="@string/pref_mms_settings_title"
         android:key="pref_key_mms_settings">
 
-        <CheckBoxPreference 
+        <CheckBoxPreference
             android:defaultValue="true"
             android:key="pref_key_mms_group_mms"
             android:summary="@string/pref_summary_mms_group_mms"
@@ -114,6 +114,14 @@
             android:title="@string/pref_title_notification_enabled"
             android:summary="@string/pref_summary_notification_enabled"
             android:defaultValue="true" />
+
+       <CheckBoxPreference
+            android:key="pref_key_enable_privacy_mode"
+            android:layout="?android:attr/preferenceLayoutChild"
+            android:dependency="pref_key_enable_notifications"
+            android:defaultValue="false"
+            android:title="@string/pref_title_notification_privacy_mode_enabled"
+            android:summary="@string/pref_summary_notification_privacy_mode_enabled" />
 
         <RingtonePreference
             android:layout="?android:attr/preferenceLayoutChild"
@@ -187,7 +195,7 @@
     </PreferenceCategory>
 
     <!-- Templates Settings -->
-    <PreferenceCategory android:title="@string/prefs_templates_settings" >
+    <PreferenceCategory android:title="@string/prefs_templates_settings">
         <Preference
             android:key="pref_key_templates_manage"
             android:persistent="false"
