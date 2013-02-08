@@ -124,6 +124,7 @@
     <!-- Header of slideshow showing which slide is being displayed -->
     <string name="slide_show_part">Part <xliff:g id="part">%1$s</xliff:g>/<xliff:g id="total">%2$s</xliff:g></string>
 
+
     <!-- Menu item in slide edit screen for removing the text from the slide being edited -->
     <string name="remove_text">Remove text</string>
     <!-- Menu item in slide edit screen for adding a picture to the slide being edited -->
@@ -472,15 +473,15 @@
     <!-- Label in "Message details" dialog -->
     <string name="error_code_label">Error code:\u0020</string>
 
-    <!-- Menu title for editing a message -->
-    <string name="menu_edit">Edit</string>
-    <!-- Menu title for deleting undelivered messages or messages on
-         the SIM card. -->
-    <string name="menu_delete_messages">Delete messages</string>
-    <!-- Menu title for locking a message -->
-    <string name="menu_lock">Lock</string>
-    <!-- Menu title for unlocking a message -->
-    <string name="menu_unlock">Unlock</string>
+   <!-- Menu title for editing a message -->
+   <string name="menu_edit">Edit</string>
+   <!-- Menu title for deleting undelivered messages or messages on
+        the SIM card. -->
+   <string name="menu_delete_messages">Delete messages</string>
+   <!-- Menu title for locking a message -->
+   <string name="menu_lock">Lock</string>
+   <!-- Menu title for unlocking a message -->
+   <string name="menu_unlock">Unlock</string>
 
     <!-- Manage SIM Messages -->
     <!-- Menu title to copy a selected message from the SIM card to the phone. -->
@@ -521,6 +522,7 @@
     <string name="status_label">Status:\u0020</string>
     <!-- Label in "Report" window [CHAR LIMIT=50]-->
     <string name="delivered_label">Delivered:\u0020</string>
+
 
     <!-- Attachment Type Selector Adapter. This string is an option in the "Attach" dialog, "Add music" dialog -->
     <string name="attach_image">Pictures</string>
@@ -901,14 +903,6 @@
     <string name="qm_quick_reply">Reply</string>
     <string name="qm_mark_read">Read</string>
 
-    <!-- Privacy mode -->
-    <string name="pref_title_notification_privacy_mode_enabled">Privacy mode</string>
-    <string name="pref_summary_notification_privacy_mode_enabled">Hide sender and message in status bar and disable Quick reply</string>
-    <string name="notification_single_title_privacy_mode">New message</string>
-    <string name="notification_single_text_privacy_mode">1 unread message</string>
-    <string name="notification_multiple_title_privacy_mode">New messages</string>
-    <string name="notification_multiple_text_privacy_mode"><xliff:g id="number" example="3">%1$s</xliff:g> unread messages</string>
-    <string name="notification_ticker_privacy_mode">New message received</string>
     <!-- CYANOGENMOD EDITS END -->
 
 </resources>
