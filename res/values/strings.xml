@@ -894,6 +894,10 @@
     <!-- Hint text in message body field when keyboard is exposed -->
     <string name="type_to_reply_text_enter_to_send">Type to reply</string>
 
+    <!-- Quick Emoji -->
+    <string name="pref_title_pref_key_emojis_quick">Quick emojis button</string>
+    <string name="pref_summary_pref_key_emojis_quick">Shows a button to the left of text input-area for emoji</string>
+
     <!-- QM Toast -->
     <string name="toast_sending_message">Sending message</string>
 
