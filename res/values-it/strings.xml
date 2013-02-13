@@ -173,10 +173,8 @@
     <string name="pref_title_sms_delete" msgid="6890538316799296878">"Limite SMS"</string>
     <string name="pref_title_mms_delete" msgid="7265878070847351664">"Limite MMS"</string>
     <string name="pref_title_notification_enabled" msgid="9118792213953729414">"Notifiche"</string>
-    <string name="pref_summary_notification_enabled" msgid="619729096820999905">"Visualizza notifiche messaggi nella barra di stato"</string>
     <string name="pref_title_notification_vibrateWhen" msgid="4251208067092761057">"Vibrazione"</string>
-    <string name="pref_summary_notification_vibrateWhen" msgid="669655090822561447">"Attiva anche vibrazione alla notifica"</string>
-    <string name="pref_title_notification_ringtone" msgid="5467265237106229952">"Scegli suoneria"</string>
+    <string name="pref_title_notification_ringtone" msgid="8667533917574559659">"Suono"</string>
     <string name="pref_messages_to_save" msgid="3202539743892934926">"Imposta numero di messaggi da salvare"</string>
     <string name="pref_title_input_type">Funzione Invio</string>
     <string name="pref_summary_input_type">Seleziona la funzione del tasto Invio durante la scrittura dei messaggi</string>
