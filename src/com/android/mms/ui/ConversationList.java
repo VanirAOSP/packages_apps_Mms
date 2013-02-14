@@ -172,6 +172,7 @@ public class ConversationList extends ListActivity implements DraftCache.OnDraft
     @Override
     public void onPause() {
         super.onPause();
+        mIsRunning = false;
 
         // Remember where the list is scrolled to so we can restore the scroll position
         // when we come back to this activity and *after* we complete querying for the
@@ -285,6 +286,7 @@ public class ConversationList extends ListActivity implements DraftCache.OnDraft
     @Override
     protected void onStart() {
         super.onStart();
+        mIsRunning = true;
 
         MessagingNotification.cancelNotification(getApplicationContext(),
                 SmsRejectedReceiver.SMS_REJECTED_NOTIFICATION_ID);
@@ -311,12 +313,6 @@ public class ConversationList extends ListActivity implements DraftCache.OnDraft
         if (!Conversation.loadingThreads()) {
             Contact.invalidateCache();
         }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mIsRunning = false;
     }
 
     @Override

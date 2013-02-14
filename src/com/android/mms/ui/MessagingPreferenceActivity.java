@@ -175,8 +175,9 @@ public class MessagingPreferenceActivity extends PreferenceActivity
         mClearHistoryPref = findPreference("pref_key_mms_clear_history");
         mEnableNotificationsPref = (CheckBoxPreference) findPreference(NOTIFICATION_ENABLED);
         mMmsAutoRetrievialPref = (CheckBoxPreference) findPreference(AUTO_RETRIEVAL);
+        mVibratePref = (CheckBoxPreference) findPreference(NOTIFICATION_VIBRATE);
+        mRingtonePref = (RingtonePreference) findPreference(NOTIFICATION_RINGTONE);
         mEnablePrivacyModePref = (CheckBoxPreference) findPreference(PRIVACY_MODE_ENABLED);
-        mVibrateWhenPref = (ListPreference) findPreference(NOTIFICATION_VIBRATE_WHEN);
         mManageTemplate = findPreference(MANAGE_TEMPLATES);
         mGestureSensitivity = (ListPreference) findPreference(GESTURE_SENSITIVITY);
 
@@ -190,9 +191,6 @@ public class MessagingPreferenceActivity extends PreferenceActivity
         mInputTypePref = (ListPreference) findPreference(INPUT_TYPE);
         mInputTypeEntries = getResources().getTextArray(R.array.pref_entries_input_type);
         mInputTypeValues = getResources().getTextArray(R.array.pref_values_input_type);
-        // Vibration
-        mVibrateEntries = getResources().getTextArray(R.array.prefEntries_vibrateWhen);
-        mVibrateValues = getResources().getTextArray(R.array.prefValues_vibrateWhen);
 
         setMessagePreferences();
     }
@@ -313,8 +311,17 @@ public class MessagingPreferenceActivity extends PreferenceActivity
         // Fix up the recycler's summary with the correct values
         setSmsDisplayLimit();
         setMmsDisplayLimit();
+        String soundValue = sharedPreferences.getString(NOTIFICATION_RINGTONE, null);
+        setRingtoneSummary(soundValue);
+    }
 
-        adjustVibrateSummary(mVibrateWhenPref.getValue());
+    private void setRingtoneSummary(String soundValue) {
+        Uri soundUri = TextUtils.isEmpty(soundValue) ? null : Uri.parse(soundValue);
+        Ringtone tone = soundUri != null ? RingtoneManager.getRingtone(this, soundUri) : null;
+        mRingtonePref.setSummary(tone != null ? tone.getTitle(this)
+                : getResources().getString(R.string.silent_ringtone));
+        
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         // Read the input type value and set the summary
         String inputType = sharedPreferences.getString(MessagingPreferenceActivity.INPUT_TYPE,
