@@ -131,21 +131,17 @@
             android:ringtoneType="notification"
             android:defaultValue="content://settings/system/notification_sound" />
 
-        <ListPreference
+        <CheckBoxPreference
             android:layout="?android:attr/preferenceLayoutChild"
             android:dependency="pref_key_enable_notifications"
-            android:key="pref_key_vibrateWhen"
-            android:defaultValue="@string/prefDefault_vibrateWhen"
-            android:title="@string/pref_title_notification_vibrateWhen"
-            android:summary="@string/pref_summary_notification_vibrateWhen"
-            android:entries="@array/prefEntries_vibrateWhen"
-            android:entryValues="@array/prefValues_vibrateWhen"
-            android:dialogTitle="@string/prefDialogTitle_vibrateWhen" />
+            android:key="pref_key_vibrate"
+            android:defaultValue="false"
+            android:title="@string/pref_title_notification_vibrateWhen" />
 
         <com.android.mms.preferences.CustomVibrateListPreference
             android:layout="?android:attr/preferenceLayoutChild"
             android:key="pref_key_mms_notification_vibrate_pattern"
-            android:dependency="pref_key_vibrateWhen"
+            android:dependency="pref_key_vibrate"
             android:defaultValue=""
             android:title="@string/pref_title_mms_notification_vibrate_pattern"
             android:summary="@string/pref_summary_mms_notification_vibrate_pattern"
