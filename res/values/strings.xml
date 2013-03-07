@@ -689,10 +689,10 @@
     <!-- Search setting description -->
     <string name="search_setting_description">Text in your messages</string>
 
-    <!--  Search empty results -->
+    <!-- Search empty results -->
     <string name="search_empty">No matches.</string>
 
-    <!--  Search results title -->
+    <!-- Search results title -->
     <plurals name="search_results_title">
         <!-- Case of 1 result. -->
         <item quantity="one"><xliff:g id="number" example="1">%1$s</xliff:g> result for \"<xliff:g id="search" example="???">%2$s</xliff:g>\"</item>
@@ -913,11 +913,18 @@
     <string name="notification_multiple_title_privacy_mode">New messages</string>
     <string name="notification_multiple_text_privacy_mode"><xliff:g id="number" example="3">%1$s</xliff:g> unread messages</string>
     <string name="notification_ticker_privacy_mode">New message received</string>
-    <!-- CYANOGENMOD EDITS END -->
 
     <!-- Insert contact information -->
     <string name="menu_insert_contact_info">Insert contact info</string>
     <string name="cannot_find_contact">Can\'t insert information of the chosen contact</string>
     <string name="insert_contact_info_positive_button">Insert</string>
 
+    <!-- Direct Call Feature -->
+    <string name="direct_call_title">Direct Call</string>
+    <string name="direct_call_summary">Picking up the phone calls the current contact</string>
+
+    <!-- Message Font size -->
+    <string name="pref_title_mms_message_font_size">Message font size</string>
+    <string name="pref_summary_mms_message_font_size">Change font size of message view</string>
+    <string name="pref_dialogtitle_mms_message_font_size">Select font size</string>
 </resources>
