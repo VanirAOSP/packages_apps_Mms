@@ -1139,7 +1139,7 @@ public class MessagingNotification {
                         }
                     }
                     // When collapsed, show all the senders like this:
-                    //     Fred Flinstone, Barry Manilow, Pete...
+                    // Fred Flinstone, Barry Manilow, Pete...
                     noti.setContentText(formatSenders(context, mostRecentNotifPerThread));
                     Notification.InboxStyle inboxStyle = new Notification.InboxStyle(noti);
 
@@ -1163,33 +1163,18 @@ public class MessagingNotification {
                                 " showing inboxStyle notification");
                     }
                 }
-                // When collapsed, show all the senders like this:
-                //     Fred Flinstone, Barry Manilow, Pete...
-                noti.setContentText(formatSenders(context, mostRecentNotifPerThread));
-                Notification.InboxStyle inboxStyle = new Notification.InboxStyle(noti);
+            }
 
-                // We have to set the summary text to non-empty so the content text doesn't show
-                // up when expanded.
-                inboxStyle.setSummaryText(" ");
+            // Trigger the QuickMessage pop-up activity if enabled
+            // But don't show the QuickMessage if the user is in a call or the phone is ringing
+            if (qmPopupEnabled && qmIntent != null) {
+                TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+                if (tm.getCallState() == TelephonyManager.CALL_STATE_IDLE && !ConversationList.mIsRunning && !ComposeMessageActivity.mIsRunning) {
+                    // Since a QM Popup may wake and unlock we need to prevent the light from being dismissed
+                    notification.flags |= Notification.FLAG_FORCE_LED_SCREEN_OFF;
 
-                // At this point we've got multiple messages in multiple threads. We only
-                // want to show the most recent message per thread, which are in
-                // mostRecentNotifPerThread.
-                int uniqueThreadMessageCount = mostRecentNotifPerThread.size();
-                int maxMessages = Math.min(MAX_MESSAGES_TO_SHOW, uniqueThreadMessageCount);
-
-                for (int i = 0; i < maxMessages; i++) {
-                    NotificationInfo info = mostRecentNotifPerThread.get(i);
-                    inboxStyle.addLine(info.formatInboxMessage(context));
-                }
-                notification = inboxStyle.build();
-
-                uniqueThreads.clear();
-                mostRecentNotifPerThread.clear();
-
-                if (DEBUG) {
-                    Log.d(TAG, "updateNotification: multi messages," +
-                            " showing inboxStyle notification");
+                    // Show the popup
+                    context.startActivity(qmIntent);
                 }
             }
         } else {
