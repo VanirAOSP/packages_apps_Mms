@@ -1188,14 +1188,13 @@ public class ComposeMessageActivity extends Activity
 
                 Intent sms = createIntent(this, 0);
                 sms.setData(Uri.parse("sms:" + uriString));
- 
+
                 String addSmsString = getString(R.string.menu_sms_number_selected,
                     uriString);
                 menu.add(0, MENU_SMS_NUMBER_SELECTED, 0, addSmsString)
                     .setOnMenuItemClickListener(l)
                     .setIntent(sms);
                 saveDraft(false);
-
             }
         }
     }
