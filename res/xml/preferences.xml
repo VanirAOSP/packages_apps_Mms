@@ -143,6 +143,7 @@
             android:entryValues="@array/pref_mms_notification_vibrate_pattern_values"
             android:dialogTitle="@string/pref_title_mms_notification_vibrate_pattern" />
 
+    </PreferenceCategory> 
     <!-- QuickMessage settings -->
     <PreferenceCategory android:title="@string/pref_quickmessage">
         <CheckBoxPreference
