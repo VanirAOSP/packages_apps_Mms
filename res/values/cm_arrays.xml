@@ -83,5 +83,4 @@
         <item>1</item> <!-- MessagingPreferenceActivity.UNICODE_STRIPPING_NON_ENCODABLE constant -->
         <item>2</item>
     </string-array>
-
 </resources>
