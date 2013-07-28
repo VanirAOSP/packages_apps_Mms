@@ -58,6 +58,7 @@ import com.android.mms.R;
 import com.android.mms.data.Contact;
 import com.android.mms.data.Conversation;
 import com.android.mms.ui.ClassZeroActivity;
+import com.android.mms.util.AddressUtils;
 import com.android.mms.util.Recycler;
 import com.android.mms.util.SendingProgressTokenManager;
 import com.android.mms.widget.MmsWidgetProvider;
@@ -283,6 +284,12 @@ public class SmsReceiverService extends Service {
                         mSending = false;
                         messageFailedToSend(msgUri, SmsManager.RESULT_ERROR_GENERIC_FAILURE);
                         success = false;
+                        // Sending current message fails. Try to send more pending messages
+                        // if there is any.
+                        sendBroadcast(new Intent(SmsReceiverService.ACTION_SEND_MESSAGE,
+                                null,
+                                this,
+                                SmsReceiver.class));
                     }
                 }
             } finally {
@@ -464,8 +471,7 @@ public class SmsReceiverService extends Service {
             return null;
         } else if (sms.isReplace()) {
             return replaceMessage(context, msgs, error);
-        } else if (MmsConfig.getSprintVVMEnabled() &&
-                   sms.getOriginatingAddress().contentEquals("9016")) {
+        } else if (AddressUtils.isSuppressedSprintVVM(context, sms.getOriginatingAddress())) {
             return null;
         } else {
             return storeMessage(context, msgs, error);

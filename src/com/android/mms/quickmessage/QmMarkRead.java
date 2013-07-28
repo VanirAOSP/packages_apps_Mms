@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package com.android.mms.quickmessage;
 
 import android.app.NotificationManager;

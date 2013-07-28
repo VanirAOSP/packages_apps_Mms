@@ -403,7 +403,7 @@ public class MessageUtils {
     }
 
     public static int getAttachmentType(SlideshowModel model, MultimediaMessagePdu mmp) {
-        if (model == null || mmp == null) { 
+        if (model == null || mmp == null) {
             return MessageItem.ATTACHMENT_TYPE_NOT_LOADED;
         }
 
@@ -910,6 +910,7 @@ public class MessageUtils {
         // Launch the slideshow activity to play/view.
         Intent intent = new Intent(context, SlideshowActivity.class);
         intent.setData(msgUri);
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         if (requestCode > 0 && context instanceof Activity) {
             ((Activity)context).startActivityForResult(intent, requestCode);
         } else {

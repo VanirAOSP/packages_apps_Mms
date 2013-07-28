@@ -363,14 +363,9 @@
     <string name="template_not_present_error">Määritettyä pohjaa ei löydy</string>
     <string name="template_not_present_error_title">Virhe</string>
     <string name="template_select">Valitse viestipohja</string>
-    <string name="template_cancel_confirm_title">Varoitus</string>
-    <string name="template_cancel_confirm_text">Viestipohja poistetaan. Haluatko jatkaa?</string>
     <string name="gestures_already_present">Varoitus: Samankaltainen ele on liitetty toiseen pohjaan!</string>
-    <string name="pref_title_mms_notification_vibrate_settings">Värinäasetukset</string>
     <string name="pref_title_mms_notification_vibrate_pattern">Värinän kaava</string>
     <string name="pref_summary_mms_notification_vibrate_pattern">Muuta värinän kaavaa</string>
-    <string name="pref_title_mms_notification_vibrate_call">Värinä puhelussa</string>
-    <string name="pref_summary_mms_notification_vibrate_call">Ota värinä käyttöön puhelun aikana</string>
     <string name="pref_title_mms_notification_vibrate_custom">Kustomoitu</string>
     <string name="pref_text_mms_notification_vibrate_custom">Muotoile päälle/pois millisekunneissa: päälle, pois, päälle, pois...</string>
     <string name="pref_extra_settings">Lisäasetukset</string>
@@ -378,14 +373,11 @@
     <string name="pref_summary_mms_full_timestamp">Näytä aika ja päivä aikaleimassa</string>
     <string name="pref_title_mms_use_sent_timestamp">Alkuperäinen aikaleima</string>
     <string name="pref_summary_mms_use_sent_timestamp">Näytä lähetyspäivä vastaanottopäivän sijaan</string>
-    <string name="pref_title_strip_unicode">Rajaa merkistöä</string>
-    <string name="pref_summary_strip_unicode">Muuta yleisiksi merkeiksi jotka eivät ole tuettuna 160 merkin tekstiviesteissä</string>
     <string name="pref_title_enable_emojis">Emoji-tuki</string>
     <string name="pref_summary_enable_emojis">Ota 471 unicode-hymiötä käyttöön</string>
     <string name="pref_keyboard_emoji">Emoji</string>
     <string name="pref_keyboard_new_line">Uusi rivi</string>
     <string name="pref_title_input_type">Näppäimistön tyyppi</string>
-    <string name="pref_summary_input_type">Valitse näppäimistön tyyppi kirjoitettaessa viestiä</string>
     <string name="pref_quickmessage">QuickMessage</string>
     <string name="pref_quickmessage_title">Ota QuickMessage käyttöön</string>
     <string name="pref_quickmessage_summary">Näytä QuickMessage pop-up-ikkuna</string>
@@ -402,5 +394,4 @@
     <string name="type_to_reply_text_enter_to_send">Kirjoita vastataksesi</string>
     <string name="toast_sending_message">Lähetetään</string>
     <string name="qm_quick_reply">Vastaa</string>
-
 </resources>

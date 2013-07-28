@@ -45,6 +45,17 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INSTALL_DRM" />
     <uses-permission android:name="android.permission.WRITE_APN_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+
+    <!-- Needed for QuickMessage -->
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+
+    <!-- Grant permission to system apps to access receiver -->
+    <permission android:name="android.permission.MMS_PUSH"
+            android:protectionLevel="signatureOrSystem"
+            android:label="@string/label_mms_push"
+            android:description="@string/desc_mms_push"/>
+    <uses-permission android:name="android.permission.MMS_PUSH"/>
 
     <!-- Needed for QuickMessage -->
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
@@ -211,6 +222,13 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name=".transaction.MmsSystemPushMsgReceiver"
+                android:permission="android.permission.MMS_PUSH">
+            <intent-filter>
+                <action android:name="android.intent.action.MMS_PUSH" />
+            </intent-filter>
+        </receiver>
+
         <activity android:name=".ui.ManageSimMessages"
                   android:theme="@style/MmsHoloTheme"
                   android:launchMode="singleTop"
@@ -306,10 +324,10 @@
         </provider>
 
         <service android:name=".ui.NoConfirmationSendService"
-                 android:permission="android.permission.SEND_SMS_NO_CONFIRMATION"
+                 android:permission="android.permission.SEND_RESPOND_VIA_MESSAGE"
                  android:exported="true" >
             <intent-filter>
-                <action android:name="com.android.mms.intent.action.SENDTO_NO_CONFIRMATION" />
+                <action android:name="android.intent.action.RESPOND_VIA_MESSAGE" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:scheme="sms" />
                 <data android:scheme="smsto" />

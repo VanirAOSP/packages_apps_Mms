@@ -64,6 +64,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.android.mms.LogTag;
+import com.android.mms.MmsConfig;
 import com.android.mms.R;
 import com.android.mms.data.Contact;
 import com.android.mms.data.Conversation;
@@ -170,7 +171,7 @@ public class MessagingNotification {
 
     private static OnDeletedReceiver sNotificationDeletedReceiver = new OnDeletedReceiver();
     private static Intent sNotificationOnDeleteIntent;
-    private static Handler sToastHandler = new Handler();
+    private static Handler sHandler = new Handler();
     private static PduPersister sPduPersister;
     private static final int MAX_BITMAP_DIMEN_DP = 360;
     private static float sScreenDensity;
@@ -296,6 +297,9 @@ public class MessagingNotification {
         if (delivery != null) {
             delivery.deliver(context, isStatusMessage);
         }
+
+        notificationSet.clear();
+        threads.clear();
     }
 
     /**
@@ -311,9 +315,17 @@ public class MessagingNotification {
             return;
         }
         Uri ringtoneUri = Uri.parse(ringtoneStr);
-        NotificationPlayer player = new NotificationPlayer(LogTag.APP);
+        final NotificationPlayer player = new NotificationPlayer(LogTag.APP);
         player.play(context, ringtoneUri, false, AudioManager.STREAM_NOTIFICATION,
                 IN_CONVERSATION_NOTIFICATION_VOLUME);
+
+        // Stop the sound after five seconds to handle continuous ringtones
+        sHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                player.stop();
+            }
+        }, 5000);
     }
 
     /**
@@ -793,6 +805,9 @@ public class MessagingNotification {
             Bitmap attachmentBitmap,
             Contact contact,
             int attachmentType) {
+        if (AddressUtils.isSuppressedSprintVVM(context, address)) {
+            return null;
+        }
         Intent clickIntent = ComposeMessageActivity.createIntent(context, threadId);
         clickIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                 | Intent.FLAG_ACTIVITY_SINGLE_TOP
@@ -804,8 +819,6 @@ public class MessagingNotification {
                 0, senderInfo.length() - 2);
         CharSequence ticker = buildTickerMessage(
                 context, address, subject, message);
-        if (MmsConfig.getSprintVVMEnabled() && address.contentEquals("9016"))
-            return null;
         return new NotificationInfo(isSms,
                 clickIntent, message, subject, ticker, timeMillis,
                 senderInfoName, attachmentBitmap, contact, attachmentType, threadId);
@@ -831,7 +844,7 @@ public class MessagingNotification {
             return;
         }
 
-        sToastHandler.post(new Runnable() {
+        sHandler.post(new Runnable() {
             @Override
             public void run() {
                 Toast.makeText(context, message, (int)timeMillis).show();
@@ -961,40 +974,36 @@ public class MessagingNotification {
         int defaults = 0;
 
         if (isNew) {
-            String vibrateWhen;
-            if (sp.contains(MessagingPreferenceActivity.NOTIFICATION_VIBRATE_WHEN)) {
-                vibrateWhen =
-                    sp.getString(MessagingPreferenceActivity.NOTIFICATION_VIBRATE_WHEN, null);
-            } else if (sp.contains(MessagingPreferenceActivity.NOTIFICATION_VIBRATE)) {
-                vibrateWhen =
-                        sp.getBoolean(MessagingPreferenceActivity.NOTIFICATION_VIBRATE, false) ?
-                    context.getString(R.string.prefDefault_vibrate_true) :
-                    context.getString(R.string.prefDefault_vibrate_false);
-            } else {
-                vibrateWhen = context.getString(R.string.prefDefault_vibrateWhen);
+            boolean vibrate = false;
+
+            if (sp.contains(MessagingPreferenceActivity.NOTIFICATION_VIBRATE)) {
+                // The most recent change to the vibrate preference is to store a boolean
+                // value in NOTIFICATION_VIBRATE. If prefs contain that preference, use that
+                // first.
+                vibrate = sp.getBoolean(MessagingPreferenceActivity.NOTIFICATION_VIBRATE, false);
+            } else if (sp.contains(MessagingPreferenceActivity.NOTIFICATION_VIBRATE_WHEN)) {
+                // This is to support the pre-JellyBean MR1.1 version of vibrate preferences
+                // when vibrate was a tri-state setting. As soon as the user opens the Messaging
+                // app's settings, it will migrate this setting from NOTIFICATION_VIBRATE_WHEN
+                // to the boolean value stored in NOTIFICATION_VIBRATE.
+                String vibrateWhen =
+                        sp.getString(MessagingPreferenceActivity.NOTIFICATION_VIBRATE_WHEN, null);
+                vibrate = "always".equals(vibrateWhen);
             }
 
-            TelephonyManager mTM = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-            boolean callStateIdle = mTM.getCallState() == TelephonyManager.CALL_STATE_IDLE;
-            boolean vibrateOnCall = sp.getBoolean(MessagingPreferenceActivity.NOTIFICATION_VIBRATE_CALL, true);
+            if (vibrate) {
+                String pattern = sp.getString(
+                        MessagingPreferenceActivity.NOTIFICATION_VIBRATE_PATTERN, "0,1200");
+                if ("custom".equals(pattern)) {
+                    pattern = sp.getString(
+                            MessagingPreferenceActivity.NOTIFICATION_VIBRATE_PATTERN_CUSTOM, "0,1200");
+                }
 
-            boolean vibrateAlways = vibrateWhen.equals("always");
-            boolean vibrateSilent = vibrateWhen.equals("silent");
-            AudioManager audioManager =
-                (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-            boolean nowSilent =
-                audioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE;
-
-            if ((vibrateAlways || vibrateSilent && nowSilent) && (vibrateOnCall || (!vibrateOnCall && callStateIdle))) {
-                /* WAS: notificationdefaults |= Notification.DEFAULT_VIBRATE;*/
-                String mVibratePattern = "custom".equals(sp.getString(MessagingPreferenceActivity.NOTIFICATION_VIBRATE_PATTERN, null))
-                        ? sp.getString(MessagingPreferenceActivity.NOTIFICATION_VIBRATE_PATTERN_CUSTOM, "0,1200")
-                                : sp.getString(MessagingPreferenceActivity.NOTIFICATION_VIBRATE_PATTERN, "0,1200");
-                        if(!mVibratePattern.equals("")) {
-                            noti.setVibrate(parseVibratePattern(mVibratePattern));
-                        } else {
-                            defaults |= Notification.DEFAULT_VIBRATE;
-                        }
+                if (!TextUtils.isEmpty(pattern)) {
+                    noti.setVibrate(parseVibratePattern(pattern));
+                } else {
+                    defaults |= Notification.DEFAULT_VIBRATE;
+                }
             }
 
             String ringtoneStr = sp.getString(MessagingPreferenceActivity.NOTIFICATION_RINGTONE,
@@ -1054,7 +1063,7 @@ public class MessagingNotification {
                 mrIntent.putExtra(QmMarkRead.SMS_THREAD_ID, mostRecentNotification.mThreadId);
                 PendingIntent mrPendingIntent = PendingIntent.getBroadcast(context, 0, mrIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT);
-                noti.addAction(R.drawable.ic_menu_done_holo_dark, markReadText, mrPendingIntent);
+                noti.addAction(R.drawable.ic_mark_read_holo_dark, markReadText, mrPendingIntent);
 
                 // Add the Call action
                 CharSequence callText = context.getText(R.string.menu_call);
@@ -1074,7 +1083,6 @@ public class MessagingNotification {
 
                 if (mostRecentNotification.mAttachmentBitmap != null) {
                     // The message has a picture, show that
-
                     notification = new Notification.BigPictureStyle(noti)
                         .bigPicture(mostRecentNotification.mAttachmentBitmap)
                         // This sets the text for the expanded picture form:
@@ -1155,6 +1163,9 @@ public class MessagingNotification {
                         inboxStyle.addLine(info.formatInboxMessage(context));
                     }
                     notification = inboxStyle.build();
+                    uniqueThreads.clear();
+                    mostRecentNotifPerThread.clear();
+
                     if (DEBUG) {
                         Log.d(TAG, "updateNotification: multi messages," +
                                 " showing inboxStyle notification");
@@ -1165,8 +1176,10 @@ public class MessagingNotification {
             // Trigger the QuickMessage pop-up activity if enabled
             // But don't show the QuickMessage if the user is in a call or the phone is ringing
             if (qmPopupEnabled && qmIntent != null) {
-                TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-                if (tm.getCallState() == TelephonyManager.CALL_STATE_IDLE && !ConversationList.mIsRunning && !ComposeMessageActivity.mIsRunning) {
+                final TelephonyManager tm =
+                        (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+                boolean callIsActive = tm.getCallState() != TelephonyManager.CALL_STATE_IDLE;
+                if (!callIsActive && !ConversationList.mIsRunning && !ComposeMessageActivity.mIsRunning) {
                     // Show the popup
                     context.startActivity(qmIntent);
                 }
