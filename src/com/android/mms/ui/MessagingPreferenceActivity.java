@@ -718,7 +718,7 @@ public class MessagingPreferenceActivity extends PreferenceActivity
         editor.apply();
     }
 
-<!-- This may not be needed anymore -->
+    // <!-- This may not be needed anymore --> // this may be an xml comment in a java file
     public static boolean getDirectCallEnabled(Context context) {
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
     boolean directCallEnabled = prefs.getBoolean(MessagingPreferenceActivity.DIRECT_CALL_PREF,false);

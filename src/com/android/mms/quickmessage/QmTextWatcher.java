@@ -27,6 +27,11 @@ import android.widget.TextView;
 
 import com.android.mms.util.UnicodeFilter;
 
+public class QmTextWatcher implements TextWatcher {
+    private TextView mTextView;
+    private ImageButton mSendButton;
+    private ImageButton mTemplateButton;
+    private int mTemplateCount;
     private UnicodeFilter mUnicodeFilter;
     private Context mContext;
     private static final int CHARS_REMAINING_BEFORE_COUNTER_SHOWN = 30;
