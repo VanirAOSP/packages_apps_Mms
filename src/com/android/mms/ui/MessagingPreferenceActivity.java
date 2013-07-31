@@ -113,46 +113,6 @@ public class MessagingPreferenceActivity extends PreferenceActivity
     private static final String DIRECT_CALL_PREF = "direct_call_pref";
     public static final String MESSAGE_FONT_SIZE = "pref_key_mms_message_font_size";
 
-    // Emoji
-    public static final String ENABLE_EMOJIS             = "pref_key_enable_emojis";
-    public static final String ENABLE_QUICK_EMOJIS       = "pref_key_enable_quick_emojis";
-    public static final String SOFTBANK_EMOJIS           = "pref_key_enable_softbank_encoding";
-
-    // Unicode
-    public static final String UNICODE_STRIPPING            = "pref_key_unicode_stripping";
-    public static final String UNICODE_STRIPPING_VALUE      = "pref_key_unicode_stripping_value";
-    public static final int UNICODE_STRIPPING_LEAVE_INTACT  = 0;
-    public static final int UNICODE_STRIPPING_NON_DECODABLE = 1;
-
-    // Split sms
-    public static final String SMS_SPLIT_COUNTER        = "pref_key_sms_split_counter";
-
-    // Templates
-    public static final String MANAGE_TEMPLATES         = "pref_key_templates_manage";
-    public static final String SHOW_GESTURE             = "pref_key_templates_show_gesture";
-    public static final String GESTURE_SENSITIVITY      = "pref_key_templates_gestures_sensitivity";
-    public static final String GESTURE_SENSITIVITY_VALUE = "pref_key_templates_gestures_sensitivity_value";
-
-    // Timestamps
-    public static final String FULL_TIMESTAMP            = "pref_key_mms_full_timestamp";
-    public static final String SENT_TIMESTAMP            = "pref_key_mms_use_sent_timestamp";
-
-    // Vibrate pattern
-    public static final String NOTIFICATION_VIBRATE_PATTERN = "pref_key_mms_notification_vibrate_pattern";
-    public static final String NOTIFICATION_VIBRATE_PATTERN_CUSTOM = "pref_key_mms_notification_vibrate_pattern_custom";
-
-    // Privacy mode
-    public static final String PRIVACY_MODE_ENABLED = "pref_key_enable_privacy_mode";
-
-    // Keyboard input type
-    public static final String INPUT_TYPE                = "pref_key_mms_input_type";
-
-    // QuickMessage
-    public static final String QUICKMESSAGE_ENABLED      = "pref_key_quickmessage";
-    public static final String QM_LOCKSCREEN_ENABLED     = "pref_key_qm_lockscreen";
-    public static final String QM_CLOSE_ALL_ENABLED      = "pref_key_close_all";
-    public static final String QM_DARK_THEME_ENABLED     = "pref_dark_theme";
-
     // Menu entries
     private static final int MENU_RESTORE_DEFAULTS = 1;
 
@@ -175,8 +135,6 @@ public class MessagingPreferenceActivity extends PreferenceActivity
     private Recycler mMmsRecycler;
     private Preference mManageTemplate;
     private ListPreference mGestureSensitivity;
-    private ListPreference mUnicodeStripping;
-    private CharSequence[] mUnicodeStrippingEntries;
     private static final int CONFIRM_CLEAR_SEARCH_HISTORY_DIALOG = 3;
 
     // Keyboard input type
@@ -189,6 +147,8 @@ public class MessagingPreferenceActivity extends PreferenceActivity
     private CheckBoxPreference mEnableQmLockscreenPref;
     private CheckBoxPreference mEnableQmCloseAllPref;
     private CheckBoxPreference mEnableQmDarkThemePref;
+
+    private CheckBoxPreference mDirectCall;
 
     @Override
     protected void onCreate(Bundle icicle) {
@@ -229,8 +189,6 @@ public class MessagingPreferenceActivity extends PreferenceActivity
         mRingtonePref = (RingtonePreference) findPreference(NOTIFICATION_RINGTONE);
         mManageTemplate = findPreference(MANAGE_TEMPLATES);
         mGestureSensitivity = (ListPreference) findPreference(GESTURE_SENSITIVITY);
-        mUnicodeStripping = (ListPreference) findPreference(UNICODE_STRIPPING);
-        mUnicodeStrippingEntries = getResources().getTextArray(R.array.pref_unicode_stripping_entries);
 
         // Get the MMS retrieval settings. Defaults to enabled with roaming disabled
         mMmsAutoRetrievialPref = (CheckBoxPreference) findPreference(AUTO_RETRIEVAL);
@@ -362,19 +320,6 @@ public class MessagingPreferenceActivity extends PreferenceActivity
                 int value = Integer.parseInt((String) newValue);
                 sharedPreferences.edit().putInt(GESTURE_SENSITIVITY_VALUE, value).commit();
                 mGestureSensitivity.setSummary(String.valueOf(value));
-                return true;
-            }
-        });
-
-        int unicodeStripping = sharedPreferences.getInt(UNICODE_STRIPPING_VALUE, UNICODE_STRIPPING_LEAVE_INTACT);
-        mUnicodeStripping.setValue(String.valueOf(unicodeStripping));
-        mUnicodeStripping.setSummary(mUnicodeStrippingEntries[unicodeStripping]);
-        mUnicodeStripping.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                int value = Integer.parseInt((String) newValue);
-                sharedPreferences.edit().putInt(UNICODE_STRIPPING_VALUE, value).commit();
-                mUnicodeStripping.setSummary(mUnicodeStrippingEntries[value]);
                 return true;
             }
         });

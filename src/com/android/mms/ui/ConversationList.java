@@ -187,14 +187,6 @@ public class ConversationList extends ListActivity implements DraftCache.OnDraft
         mIsRunning = false;
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        mIsRunning = true;
-        mListAdapter.setOnContentChangedListener(mContentChangedListener);
-    }
-
     private void setupActionBar() {
         ActionBar actionBar = getActionBar();
 
