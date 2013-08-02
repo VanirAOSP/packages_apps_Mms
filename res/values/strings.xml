@@ -929,4 +929,10 @@
     <string name="pref_title_mms_message_font_size">Message font size</string>
     <string name="pref_summary_mms_message_font_size">Change font size of message view</string>
     <string name="pref_dialogtitle_mms_message_font_size">Select font size</string>
+
+    <!-- Add recipients -->
+    <string name="add_recipients">Add recipients</string>
+    <string name="groups_header">Groups</string>
+    <string name="loading_recipients">Loading contacts and groups</string>
+    <string name="no_recipients">No possible recipients</string>
 </resources>
