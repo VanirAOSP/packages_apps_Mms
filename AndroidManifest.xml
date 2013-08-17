@@ -175,6 +175,11 @@
             android:theme="@style/MmsHoloTheme"
             android:label="@string/edit_slideshow_activity" />
 
+        <activity android:name=".ui.AddRecipientsList"
+            android:label="@string/add_recipients"
+            android:theme="@style/MmsHoloTheme">
+        </activity>
+
         <activity android:name=".ui.RecipientListActivity"
             android:theme="@style/MmsHoloTheme"
             android:label="@string/recipient_list_activity" />
@@ -339,7 +344,6 @@
                   android:authorities="mms_temp_file"
                   android:multiprocess="true"
                   android:exported="true" />
-
 
         <activity android:name=".ui.MiniPreferenceActivity" >
             <intent-filter>
