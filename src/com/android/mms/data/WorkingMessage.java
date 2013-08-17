@@ -234,6 +234,9 @@ public class WorkingMessage {
             } catch (MmsException e) {
                 LogTag.error("Can't move %s to drafts", uri);
                 return null;
+            } catch (IllegalStateException e) {
+                Log.e(TAG,"kaBOOM! "+ e);
+                return null;
             }
         }
 
