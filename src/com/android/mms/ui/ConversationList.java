@@ -172,7 +172,6 @@ public class ConversationList extends ListActivity implements DraftCache.OnDraft
     @Override
     public void onPause() {
         super.onPause();
-        mIsRunning = false;
 
         // Don't listen for changes while we're paused.
         mListAdapter.setOnContentChangedListener(null);
@@ -185,6 +184,14 @@ public class ConversationList extends ListActivity implements DraftCache.OnDraft
         View firstChild = listView.getChildAt(0);
         mSavedFirstItemOffset = (firstChild == null) ? 0 : firstChild.getTop();
         mIsRunning = false;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        mIsRunning = true;
+        mListAdapter.setOnContentChangedListener(mContentChangedListener);
     }
 
     private void setupActionBar() {
@@ -278,7 +285,6 @@ public class ConversationList extends ListActivity implements DraftCache.OnDraft
     @Override
     protected void onStart() {
         super.onStart();
-        mIsRunning = true;
 
         MessagingNotification.cancelNotification(getApplicationContext(),
                 SmsRejectedReceiver.SMS_REJECTED_NOTIFICATION_ID);
@@ -305,12 +311,6 @@ public class ConversationList extends ListActivity implements DraftCache.OnDraft
         if (!Conversation.loadingThreads()) {
             Contact.invalidateCache();
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mIsRunning = true;
     }
 
     @Override
