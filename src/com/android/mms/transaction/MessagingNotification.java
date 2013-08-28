@@ -46,7 +46,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.AudioManager;
 import android.net.Uri;
-import android.os.PowerManager;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Parcel;
@@ -70,7 +69,6 @@ import com.android.mms.R;
 import com.android.mms.data.Contact;
 import com.android.mms.data.Conversation;
 import com.android.mms.data.WorkingMessage;
-import com.android.mms.MmsConfig;
 import com.android.mms.model.SlideModel;
 import com.android.mms.model.SlideshowModel;
 import com.android.mms.quickmessage.QmMarkRead;
@@ -148,6 +146,7 @@ public class MessagingNotification {
 
     private static final Uri UNDELIVERED_URI = Uri.parse("content://mms-sms/undelivered");
 
+
     private final static String NOTIFICATION_DELETED_ACTION =
             "com.android.mms.NOTIFICATION_DELETED_ACTION";
 
@@ -179,6 +178,7 @@ public class MessagingNotification {
 
     private static final int MAX_MESSAGES_TO_SHOW = 8;  // the maximum number of new messages to
                                                         // show in a single notification.
+
 
     private MessagingNotification() {
     }
@@ -780,6 +780,7 @@ public class MessagingNotification {
                             ", addr=" + address + ", thread_id=" + threadId);
                 }
 
+
                 NotificationInfo info = getNewMessageNotificationInfo(context, true /* isSms */,
                         address, message, null /* subject */,
                         threadId, timeMillis, null /* attachmentBitmap */,
@@ -841,6 +842,7 @@ public class MessagingNotification {
             return;
         }
 
+
         if (!MessagingPreferenceActivity.getNotificationEnabled(context)) {
             return;
         }
@@ -891,7 +893,6 @@ public class MessagingNotification {
             }
         }
         TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(context);
-//        taskStackBuilder.setTaskOnHome(false);
 
         // If we have more than one unique thread, change the title (which would
         // normally be the contact who sent the message) to a generic one that
@@ -970,7 +971,8 @@ public class MessagingNotification {
             .setContentIntent(
                     taskStackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT))
             .addKind(Notification.KIND_MESSAGE)
-            .setPriority(Notification.PRIORITY_DEFAULT);     // TODO: set based on contact coming from a favorite.
+            .setPriority(Notification.PRIORITY_DEFAULT);     // TODO: set based on contact coming
+                                                             // from a favorite.
 
         int defaults = 0;
 
@@ -1010,19 +1012,6 @@ public class MessagingNotification {
             String ringtoneStr = sp.getString(MessagingPreferenceActivity.NOTIFICATION_RINGTONE,
                     null);
             noti.setSound(TextUtils.isEmpty(ringtoneStr) ? null : Uri.parse(ringtoneStr));
-            String mWakeLockTag = "WakeLock";
-
-            PowerManager pm = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
-                        PowerManager.WakeLock mWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK
-                                | PowerManager.ACQUIRE_CAUSES_WAKEUP, mWakeLockTag);
-
-                        if (sp.getBoolean("new_sms_wakelock", true)) {
-                                if (!pm.isScreenOn()) {
-                                        mWakeLock.acquire();
-                                        // Release it right after because we just acquire the Wakelock to enable the display
-                                        mWakeLock.release();
-                                }
-                        }
             if (DEBUG) {
                 Log.d(TAG, "updateNotification: new message, adding sound to the notification");
             }
@@ -1097,6 +1086,7 @@ public class MessagingNotification {
 
                 if (mostRecentNotification.mAttachmentBitmap != null) {
                     // The message has a picture, show that
+
                     notification = new Notification.BigPictureStyle(noti)
                         .bigPicture(mostRecentNotification.mAttachmentBitmap)
                         // This sets the text for the expanded picture form:
@@ -1177,6 +1167,7 @@ public class MessagingNotification {
                         inboxStyle.addLine(info.formatInboxMessage(context));
                     }
                     notification = inboxStyle.build();
+
                     uniqueThreads.clear();
                     mostRecentNotifPerThread.clear();
 
@@ -1297,7 +1288,6 @@ public class MessagingNotification {
         }
 
         TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(context);
-//        taskStackBuilder.setTaskOnHome(false);
         if (allFailedInSameThread) {
             failedIntent = new Intent(context, ComposeMessageActivity.class);
             if (isDownload) {
