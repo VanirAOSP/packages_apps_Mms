@@ -4244,6 +4244,7 @@ public class ComposeMessageActivity extends Activity
             // them back once the recipient list has settled.
             removeRecipientsListeners();
 
+
             if (mWorkingMessage.getResendMultiRecipients()) {
                 //if resend sms recipient is more than one, use mResendSmsRecipient
                 mWorkingMessage.send(mResendSmsRecipient);
