@@ -103,7 +103,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@color/timestamp_color" />
+                        android:textColor="@color/text_hairline" />
                 </LinearLayout>
 
                 <ViewStub android:id="@+id/mms_layout_view_stub"
