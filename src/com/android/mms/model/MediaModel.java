@@ -245,12 +245,13 @@ public abstract class MediaModel extends Model implements EventListener {
                     Log.w(TAG, "initMediaSize: Video size: f.getChannel().size(): " + mSize +
                             " larger than max message size: " + MmsConfig.getMaxMessageSize());
                 }
-            } else {
+            } else if (input != null) {
                 while (-1 != input.read()) {
                     mSize++;
                 }
+            } else {
+                Log.e(TAG, "initMediaSize: could not open input stream for uri="+mUri.toString());
             }
-
         } catch (IOException e) {
             // Ignore
             Log.e(TAG, "IOException caught while opening or reading stream", e);
