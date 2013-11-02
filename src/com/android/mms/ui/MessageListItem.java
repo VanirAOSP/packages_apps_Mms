@@ -75,6 +75,7 @@ import com.android.mms.util.DownloadManager;
 import com.android.mms.util.ItemLoadedCallback;
 import com.android.mms.util.EmojiParser;
 import com.android.mms.util.SmileyParser;
+
 import com.android.mms.util.ThumbnailManager.ImageLoaded;
 import com.google.android.mms.ContentType;
 import com.google.android.mms.pdu.PduHeaders;
@@ -354,7 +355,7 @@ public class MessageListItem extends LinearLayout implements
             if (mMessageItem.mSlideshow == null) {
                 debugText = "NULL slideshow";
             } else {
-                SlideModel slide = ((SlideshowModel) mMessageItem.mSlideshow).get(0);
+                SlideModel slide = mMessageItem.mSlideshow.get(0);
                 if (slide == null) {
                     debugText = "NULL first slide";
                 } else if (!slide.hasImage()) {
@@ -551,7 +552,6 @@ public class MessageListItem extends LinearLayout implements
         boolean enableEmojis = prefs.getBoolean(MessagingPreferenceActivity.ENABLE_EMOJIS, false);
 
         boolean hasSubject = !TextUtils.isEmpty(subject);
-        SmileyParser parser = SmileyParser.getInstance();
         if (hasSubject) {
             CharSequence smilizedSubject = parser.addSmileySpans(subject);
             if (enableEmojis) {

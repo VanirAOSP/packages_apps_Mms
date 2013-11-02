@@ -17,10 +17,6 @@
 
 package com.android.mms.ui;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.ListActivity;
@@ -35,16 +31,20 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SqliteWrapper;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.Contacts;
+import android.provider.Telephony;
 import android.provider.Telephony.Mms;
 import android.provider.Telephony.Threads;
 import android.util.Log;
@@ -63,11 +63,14 @@ import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.mms.LogTag;
+import com.android.mms.MmsConfig;
 import com.android.mms.R;
 import com.android.mms.data.Contact;
 import com.android.mms.data.ContactList;
@@ -80,6 +83,10 @@ import com.android.mms.util.Recycler;
 import com.android.mms.widget.MmsWidgetProvider;
 import com.google.android.mms.pdu.PduHeaders;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+
 /**
  * This activity provides a list view of existing conversations.
  */
@@ -87,7 +94,6 @@ public class ConversationList extends ListActivity implements DraftCache.OnDraft
     private static final String TAG = "ConversationList";
     private static final boolean DEBUG = false;
     private static final boolean DEBUGCLEANUP = true;
-    private static final boolean LOCAL_LOGV = DEBUG;
 
     private static final int THREAD_LIST_QUERY_TOKEN       = 1701;
     private static final int UNREAD_THREADS_QUERY_TOKEN    = 1702;
@@ -111,6 +117,7 @@ public class ConversationList extends ListActivity implements DraftCache.OnDraft
     private TextView mUnreadConvCount;
     private MenuItem mSearchItem;
     private SearchView mSearchView;
+    private View mSmsPromoBannerView;
     private int mSavedFirstVisiblePosition = AdapterView.INVALID_POSITION;
     private int mSavedFirstItemOffset;
 
@@ -120,11 +127,18 @@ public class ConversationList extends ListActivity implements DraftCache.OnDraft
 
     static private final String CHECKED_MESSAGE_LIMITS = "checked_message_limits";
 
+    // Whether or not we are currently enabled for SMS. This field is updated in onResume to make
+    // sure we notice if the user has changed the default SMS app.
+    private boolean mIsSmsEnabled;
+    private Toast mComposeDisabledToast;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.conversation_list_screen);
+
+        mSmsPromoBannerView = findViewById(R.id.banner_sms_promo);
 
         mQueryHandler = new ThreadListQueryHandler(getContentResolver());
 
@@ -147,7 +161,7 @@ public class ConversationList extends ListActivity implements DraftCache.OnDraft
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean checkedMessageLimits = mPrefs.getBoolean(CHECKED_MESSAGE_LIMITS, false);
         if (DEBUG) Log.v(TAG, "checkedMessageLimits: " + checkedMessageLimits);
-        if (!checkedMessageLimits || DEBUG) {
+        if (!checkedMessageLimits) {
             runOneTimeStorageLimitCheckForLegacyMessages();
         }
 
@@ -189,6 +203,27 @@ public class ConversationList extends ListActivity implements DraftCache.OnDraft
     @Override
     protected void onResume() {
         super.onResume();
+        boolean isSmsEnabled = MmsConfig.isSmsEnabled(this);
+        if (isSmsEnabled != mIsSmsEnabled) {
+            mIsSmsEnabled = isSmsEnabled;
+            invalidateOptionsMenu();
+        }
+
+        // Multi-select is used to delete conversations. It is disabled if we are not the sms app.
+        ListView listView = getListView();
+        if (mIsSmsEnabled) {
+            listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        } else {
+            listView.setChoiceMode(ListView.CHOICE_MODE_NONE);
+        }
+
+        // Show or hide the SMS promo banner
+        if (mIsSmsEnabled || MmsConfig.isSmsPromoDismissed(this)) {
+            mSmsPromoBannerView.setVisibility(View.GONE);
+        } else {
+            initSmsPromoBanner();
+            mSmsPromoBannerView.setVisibility(View.VISIBLE);
+        }
 
         mIsRunning = true;
         mListAdapter.setOnContentChangedListener(mContentChangedListener);
@@ -222,6 +257,54 @@ public class ConversationList extends ListActivity implements DraftCache.OnDraft
         mListAdapter.setOnContentChangedListener(mContentChangedListener);
         setListAdapter(mListAdapter);
         getListView().setRecyclerListener(mListAdapter);
+    }
+
+    private void initSmsPromoBanner() {
+        final PackageManager packageManager = getPackageManager();
+        final String smsAppPackage = Telephony.Sms.getDefaultSmsPackage(this);
+
+        // Get all the data we need about the default app to properly render the promo banner. We
+        // try to show the icon and name of the user's selected SMS app and have the banner link
+        // to that app. If we can't read that information for any reason we leave the fallback
+        // text that links to Messaging settings where the user can change the default.
+        Drawable smsAppIcon = null;
+        ApplicationInfo smsAppInfo = null;
+        try {
+            smsAppIcon = packageManager.getApplicationIcon(smsAppPackage);
+            smsAppInfo = packageManager.getApplicationInfo(smsAppPackage, 0);
+        } catch (NameNotFoundException e) {
+        }
+        final Intent smsAppIntent = packageManager.getLaunchIntentForPackage(smsAppPackage);
+
+        // If we got all the info we needed
+        if (smsAppIcon != null && smsAppInfo != null && smsAppIntent != null) {
+            ImageView defaultSmsAppIconImageView =
+                    (ImageView)mSmsPromoBannerView.findViewById(R.id.banner_sms_default_app_icon);
+            defaultSmsAppIconImageView.setImageDrawable(smsAppIcon);
+            TextView smsPromoBannerTitle =
+                    (TextView)mSmsPromoBannerView.findViewById(R.id.banner_sms_promo_title);
+            String message = getResources().getString(R.string.banner_sms_promo_title_application,
+                    smsAppInfo.loadLabel(packageManager));
+            smsPromoBannerTitle.setText(message);
+
+            mSmsPromoBannerView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(smsAppIntent);
+                }
+            });
+        } else {
+            // Otherwise the banner will be left alone and will launch settings
+            mSmsPromoBannerView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Launch settings
+                    Intent settingsIntent = new Intent(ConversationList.this,
+                            MessagingPreferenceActivity.class);
+                    startActivityIfNeeded(settingsIntent, -1);
+                }
+            });
+        }
     }
 
     /**
@@ -420,7 +503,12 @@ public class ConversationList extends ListActivity implements DraftCache.OnDraft
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem item = menu.findItem(R.id.action_delete_all);
         if (item != null) {
-            item.setVisible(mListAdapter.getCount() > 0);
+            item.setVisible((mListAdapter.getCount() > 0) && mIsSmsEnabled);
+        }
+        item = menu.findItem(R.id.action_compose_new);
+        if (item != null ){
+            // Dim compose if SMS is disabled because it will not work (will show a toast)
+            item.getIcon().setAlpha(mIsSmsEnabled ? 255 : 127);
         }
         if (!LogTag.DEBUG_DUMP) {
             item = menu.findItem(R.id.action_debug_dump);
@@ -443,7 +531,16 @@ public class ConversationList extends ListActivity implements DraftCache.OnDraft
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.action_compose_new:
-                createNewMessage();
+                if (mIsSmsEnabled) {
+                    createNewMessage();
+                } else {
+                    // Display a toast letting the user know they can not compose.
+                    if (mComposeDisabledToast == null) {
+                        mComposeDisabledToast = Toast.makeText(this,
+                                R.string.compose_disabled_toast, Toast.LENGTH_SHORT);
+                    }
+                    mComposeDisabledToast.show();
+                }
                 break;
             case R.id.action_delete_all:
                 // The invalid threadId of -1 means all threads here.
@@ -544,7 +641,9 @@ public class ConversationList extends ListActivity implements DraftCache.OnDraft
                     menu.add(0, MENU_ADD_TO_CONTACTS, 0, R.string.menu_add_to_contacts);
                 }
             }
-            menu.add(0, MENU_DELETE, 0, R.string.menu_delete);
+            if (mIsSmsEnabled) {
+                menu.add(0, MENU_DELETE, 0, R.string.menu_delete);
+            }
         }
     };
 

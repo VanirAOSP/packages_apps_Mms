@@ -16,12 +16,6 @@
 
 package com.android.mms.util;
 
-import java.io.ByteArrayOutputStream;
-import java.io.Closeable;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.util.Set;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -39,6 +33,12 @@ import com.android.mms.R;
 import com.android.mms.TempFileProvider;
 import com.android.mms.ui.UriImage;
 import com.android.mms.util.ImageCacheService.ImageData;
+
+import java.io.ByteArrayOutputStream;
+import java.io.Closeable;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.util.Set;
 
 /**
  * Primary {@link ThumbnailManager} implementation used by {@link MessagingApplication}.
@@ -496,7 +496,14 @@ public class ThumbnailManager extends BackgroundLoaderManager {
             // We need to resize down if the decoder does not support inSampleSize.
             // (For example, GIF images.)
             result = resizeDownIfTooBig(result, targetSize, true);
-            return ensureGLCompatibleBitmap(result);
+            result = ensureGLCompatibleBitmap(result);
+
+            int orientation = UriImage.getOrientation(mContext, uri);
+            // Rotate the bitmap if we need to.
+            if (result != null && orientation != 0) {
+                result = UriImage.rotateBitmap(result, orientation);
+            }
+            return result;
         }
 
         // This computes a sample size which makes the longer side at least
@@ -529,7 +536,6 @@ public class ThumbnailManager extends BackgroundLoaderManager {
             if (scale > 0.5f) return bitmap;
             return resizeBitmapByScale(bitmap, scale, 0, recycle);
         }
-
     }
 
     public static class ImageLoaded {

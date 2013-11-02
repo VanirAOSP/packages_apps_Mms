@@ -1190,6 +1190,7 @@ public class MessagingNotification {
                                 " showing inboxStyle notification");
                     }
                 }
+<<<<<<< HEAD
             }
 
             // Trigger the QuickMessage pop-up activity if enabled
@@ -1201,6 +1202,35 @@ public class MessagingNotification {
                 if (!callIsActive && !ConversationList.mIsRunning && !ComposeMessageActivity.mIsRunning) {
                     // Show the popup
                     context.startActivity(qmIntent);
+=======
+                // When collapsed, show all the senders like this:
+                //     Fred Flinstone, Barry Manilow, Pete...
+                noti.setContentText(formatSenders(context, mostRecentNotifPerThread));
+                Notification.InboxStyle inboxStyle = new Notification.InboxStyle(noti);
+
+                // We have to set the summary text to non-empty so the content text doesn't show
+                // up when expanded.
+                inboxStyle.setSummaryText(" ");
+
+                // At this point we've got multiple messages in multiple threads. We only
+                // want to show the most recent message per thread, which are in
+                // mostRecentNotifPerThread.
+                int uniqueThreadMessageCount = mostRecentNotifPerThread.size();
+                int maxMessages = Math.min(MAX_MESSAGES_TO_SHOW, uniqueThreadMessageCount);
+
+                for (int i = 0; i < maxMessages; i++) {
+                    NotificationInfo info = mostRecentNotifPerThread.get(i);
+                    inboxStyle.addLine(info.formatInboxMessage(context));
+                }
+                notification = inboxStyle.build();
+
+                uniqueThreads.clear();
+                mostRecentNotifPerThread.clear();
+
+                if (DEBUG) {
+                    Log.d(TAG, "updateNotification: multi messages," +
+                            " showing inboxStyle notification");
+>>>>>>> aosp44
                 }
             }
         } else {

@@ -42,6 +42,7 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.MediaController;
 import android.widget.MediaController.MediaPlayerControl;
+import android.widget.SeekBar;
 
 import com.android.mms.R;
 import com.android.mms.dom.AttrImpl;
@@ -284,10 +285,25 @@ public class SlideshowActivity extends Activity implements EventListener {
                 mSmilPlayer.stopWhenReload();
             }
             if (mMediaController != null) {
+                // Must set the seek bar change listener null, otherwise if we rotate it
+                // while tapping progress bar continuously, window will leak.
+                View seekBar = mMediaController
+                        .findViewById(com.android.internal.R.id.mediacontroller_progress);
+                if (seekBar instanceof SeekBar) {
+                    ((SeekBar)seekBar).setOnSeekBarChangeListener(null);
+                }
                 // Must do this so we don't leak a window.
                 mMediaController.hide();
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (mSlideView != null) {
+            mSlideView.setMediaController(null);
+        }
+        super.onDestroy();
     }
 
     @Override
