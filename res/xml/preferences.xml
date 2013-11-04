@@ -310,9 +310,7 @@
             android:summary="@string/pref_summary_wake_screen_on_incoming_sms"
             android:defaultValue="false" />
 
-    </PreferenceCategory>
-
-     <CheckBoxPreference android:defaultValue="false"
+    <CheckBoxPreference android:defaultValue="false"
                       android:key="pref_key_auto_delete"
                       android:summary="@string/pref_summary_auto_delete"
                       android:title="@string/pref_title_auto_delete" />
@@ -336,8 +334,6 @@
     <Preference android:key="pref_key_manage_sim_messages"
                       android:summary="@string/pref_summary_manage_sim_messages"
                       android:title="@string/pref_title_manage_sim_messages" />
-  </PreferenceCategory>
-  <PreferenceCategory android:title="@string/pref_mms_settings_title"
                       android:key="pref_key_mms_settings">
     <CheckBoxPreference android:defaultValue="true"
                       android:key="pref_key_mms_group_mms"

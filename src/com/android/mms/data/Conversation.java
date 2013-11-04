@@ -14,10 +14,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SqliteWrapper;
-import android.database.sqlite.SQLiteFullException;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Handler;
 import android.provider.BaseColumns;
 import android.provider.Telephony.Mms;
 import android.provider.Telephony.MmsSms;
@@ -40,7 +38,6 @@ import com.android.mms.util.AddressUtils;
 import com.android.mms.util.DraftCache;
 
 import com.google.android.mms.pdu.PduHeaders;
-import android.widget.Toast;
 
 /**
  * An interface for finding information about conversations and/or creating new ones.
@@ -104,8 +101,6 @@ public class Conversation {
     private static Object sDeletingThreadsLock = new Object();
     private boolean mMarkAsReadBlocked;
     private boolean mMarkAsReadWaiting;
-
-    private static Handler sToastHandler = new Handler();
 
     private Conversation(Context context) {
         mContext = context;
@@ -349,7 +344,7 @@ public class Conversation {
      * work is dispatched to a background thread. This function should
      * always be called from the UI thread.
      */
-    public void markAsRead(final boolean updateNotifications) {
+    public void markAsRead() {
         if (DELETEDEBUG) {
             Contact.logWithTrace(TAG, "markAsRead mMarkAsReadWaiting: " + mMarkAsReadWaiting +
                     " mMarkAsReadBlocked: " + mMarkAsReadBlocked);
@@ -396,24 +391,16 @@ public class Conversation {
                         sendReadReport(mContext, mThreadId, PduHeaders.READ_STATUS_READ);
                         LogTag.debug("markAsRead: update read/seen for thread uri: " +
                                 threadUri);
-                        try {
-                            mContext.getContentResolver().update(threadUri,
-                                    sReadContentValues, UNREAD_SELECTION, null);
-                        } catch (SQLiteFullException e) {
-                            Log.e(TAG, "Database is full", e);
-                            showStorageFullToast(mContext);
-                            return null;
-                        }
+                        mContext.getContentResolver().update(threadUri, sReadContentValues,
+                                UNREAD_SELECTION, null);
                     }
                     setHasUnreadMessages(false);
                 }
+                // Always update notifications regardless of the read state, which is usually
+                // canceling the notification of the thread that was just marked read.
+                MessagingNotification.blockingUpdateAllNotifications(mContext,
+                        MessagingNotification.THREAD_NONE);
 
-                if (updateNotifications) {
-                    // Always update notifications regardless of the read state, which is usually
-                    // canceling the notification of the thread that was just marked read.
-                    MessagingNotification.blockingUpdateAllNotifications(mContext,
-                            MessagingNotification.THREAD_NONE);
-                }
                 return null;
             }
         }.execute();
@@ -435,7 +422,7 @@ public class Conversation {
             if (!mMarkAsReadBlocked) {
                 if (mMarkAsReadWaiting) {
                     mMarkAsReadWaiting = false;
-                    markAsRead(true);
+                    markAsRead();
                 }
             }
         }
@@ -1166,23 +1153,10 @@ public class Conversation {
         ContentValues values = new ContentValues(1);
         values.put("seen", 1);
 
-        try {
-            resolver.update(Sms.Inbox.CONTENT_URI, values, "seen=0", null);
-        } catch (SQLiteFullException e) {
-            Log.e(TAG, "Database is full", e);
-            showStorageFullToast(context);
-        }
-    }
-
-    private static void showStorageFullToast(final Context context) {
-        sToastHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                final CharSequence text = context.getString(R.string.storage_is_full);
-                final int duration = Toast.LENGTH_SHORT;
-                Toast.makeText(context, text, duration).show();
-            }
-        });
+        resolver.update(Sms.Inbox.CONTENT_URI,
+                values,
+                "seen=0",
+                null);
     }
 
     private static void blockingMarkAllMmsMessagesAsSeen(final Context context) {
@@ -1214,12 +1188,10 @@ public class Conversation {
         ContentValues values = new ContentValues(1);
         values.put("seen", 1);
 
-        try {
-            resolver.update(Mms.Inbox.CONTENT_URI, values, "seen=0", null);
-        } catch (SQLiteFullException e) {
-            Log.e(TAG, "Database is full", e);
-            showStorageFullToast(context);
-        }
+        resolver.update(Mms.Inbox.CONTENT_URI,
+                values,
+                "seen=0",
+                null);
 
     }
 

@@ -25,7 +25,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Paint.FontMetricsInt;
 import android.graphics.Typeface;
@@ -33,14 +32,12 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
-import android.preference.PreferenceManager;
 import android.provider.ContactsContract.Profile;
 import android.provider.Telephony.Sms;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.TelephonyManager;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
-import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.style.ForegroundColorSpan;
@@ -50,7 +47,6 @@ import android.text.style.TextAppearanceSpan;
 import android.text.style.URLSpan;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -67,15 +63,11 @@ import com.android.mms.data.Contact;
 import com.android.mms.data.WorkingMessage;
 import com.android.mms.model.SlideModel;
 import com.android.mms.model.SlideshowModel;
-import com.android.mms.transaction.SmsReceiverService;
 import com.android.mms.transaction.Transaction;
 import com.android.mms.transaction.TransactionBundle;
 import com.android.mms.transaction.TransactionService;
 import com.android.mms.util.DownloadManager;
 import com.android.mms.util.ItemLoadedCallback;
-import com.android.mms.util.EmojiParser;
-import com.android.mms.util.SmileyParser;
-
 import com.android.mms.util.ThumbnailManager.ImageLoaded;
 import com.google.android.mms.ContentType;
 import com.google.android.mms.pdu.PduHeaders;
@@ -142,7 +134,6 @@ public class MessageListItem extends LinearLayout implements
         super.onFinishInflate();
 
         mBodyTextView = (TextView) findViewById(R.id.text_view);
-        mBodyTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP,Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(getContext()).getString(MessagingPreferenceActivity.MESSAGE_FONT_SIZE, "18")));
         mDateView = (TextView) findViewById(R.id.date_view);
         mLockedIndicator = (ImageView) findViewById(R.id.locked_indicator);
         mDeliveredIndicator = (ImageView) findViewById(R.id.delivered_indicator);
@@ -370,16 +361,9 @@ public class MessageListItem extends LinearLayout implements
         // If we're in the process of sending a message (i.e. pending), then we show a "SENDING..."
         // string in place of the timestamp.
         if (!sameItem || haveLoadedPdu) {
-            if (MessagingPreferenceActivity.getMessageSendDelayDuration(mContext) > 0
-                    && mMessageItem.getCountDown() > 0) {
-                mDateView.setText(buildTimestampLine(mMessageItem.isSending() ?
-                        mContext.getResources().getString(R.string.sent_countdown) :
+            mDateView.setText(buildTimestampLine(mMessageItem.isSending() ?
+                    mContext.getResources().getString(R.string.sending_message) :
                         mMessageItem.mTimestamp));
-            } else {
-                mDateView.setText(buildTimestampLine(mMessageItem.isSending() ?
-                        mContext.getResources().getString(R.string.sending_message) :
-                        mMessageItem.mTimestamp));
-            }
         }
         if (mMessageItem.isSms()) {
             showMmsView(false);
@@ -547,22 +531,9 @@ public class MessageListItem extends LinearLayout implements
                                        String contentType) {
         SpannableStringBuilder buf = new SpannableStringBuilder();
 
-        SharedPreferences prefs = PreferenceManager
-                .getDefaultSharedPreferences(mContext);
-        boolean enableEmojis = prefs.getBoolean(MessagingPreferenceActivity.ENABLE_EMOJIS, false);
-
         boolean hasSubject = !TextUtils.isEmpty(subject);
         if (hasSubject) {
-            CharSequence smilizedSubject = parser.addSmileySpans(subject);
-            if (enableEmojis) {
-                EmojiParser emojiParser = EmojiParser.getInstance();
-                smilizedSubject = emojiParser.addEmojiSpans(smilizedSubject);
-            }
-            // Can't use the normal getString() with extra arguments for string replacement
-            // because it doesn't preserve the SpannableText returned by addSmileySpans.
-            // We have to manually replace the %s with our text.
-            buf.append(TextUtils.replace(mContext.getResources().getString(R.string.inline_subject),
-                    new String[] { "%s" }, new CharSequence[] { smilizedSubject }));
+            buf.append(mContext.getResources().getString(R.string.inline_subject, subject));
         }
 
         if (!TextUtils.isEmpty(body)) {
@@ -574,12 +545,7 @@ public class MessageListItem extends LinearLayout implements
                 if (hasSubject) {
                     buf.append(" - ");
                 }
-                CharSequence smileyBody = parser.addSmileySpans(body);
-                if (enableEmojis) {
-                    EmojiParser emojiParser = EmojiParser.getInstance();
-                    smileyBody = emojiParser.addEmojiSpans(smileyBody);
-                }
-                buf.append(smileyBody);
+                buf.append(body);
             }
         }
 
@@ -637,11 +603,6 @@ public class MessageListItem extends LinearLayout implements
     }
 
     public void onMessageListItemClick() {
-        if (mMessageItem != null && mMessageItem.isSending() && mMessageItem.isSms()) {
-            SmsReceiverService.cancelSendingMessage(mMessageItem.mMessageUri);
-            return;
-        }
-
         // If the message is a failed one, clicking it should reload it in the compose view,
         // regardless of whether it has links in it
         if (mMessageItem != null &&
@@ -871,19 +832,5 @@ public class MessageListItem extends LinearLayout implements
     public void seekVideo(int seekTo) {
         // TODO Auto-generated method stub
 
-    }
-
-    public void updateDelayCountDown() {
-        if (mMessageItem.isSms() && mMessageItem.getCountDown() > 0 && mMessageItem.isSending()) {
-            String content = mContext.getResources().getQuantityString(
-                    R.plurals.remaining_delay_time,
-                    mMessageItem.getCountDown(), mMessageItem.getCountDown());
-            Spanned spanned = Html.fromHtml(buildTimestampLine(content));
-            mDateView.setText(spanned);
-        } else {
-            mDateView.setText(buildTimestampLine(mMessageItem.isSending()
-                    ? mContext.getResources().getString(R.string.sending_message)
-                    : mMessageItem.mTimestamp));
-        }
     }
 }
