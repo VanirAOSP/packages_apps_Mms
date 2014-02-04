@@ -18,9 +18,7 @@
 package com.android.mms.ui;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 
 import com.android.mms.model.AudioModel;
@@ -189,10 +187,10 @@ public class SlideshowPresenter extends Presenter {
      * @param image
      * @param r
      */
-    protected void presentImage(final SlideViewInterface view, final ImageModel image,
+    protected void presentImage(SlideViewInterface view, ImageModel image,
             RegionModel r, boolean dataChanged) {
-        final int transformedWidth = transformWidth(r.getWidth());
-        final int transformedHeight = transformWidth(r.getHeight());
+        int transformedWidth = transformWidth(r.getWidth());
+        int transformedHeight = transformWidth(r.getHeight());
 
         if (LOCAL_LOGV) {
             Log.v(TAG, "presentImage r.getWidth: " + r.getWidth()
@@ -202,21 +200,7 @@ public class SlideshowPresenter extends Presenter {
         }
 
         if (dataChanged) {
-            final Handler bitmapHandler = new Handler() {
-                @Override
-                public void handleMessage(Message message) {
-                    view.setImage(image.getSrc(), (Bitmap)message.obj);
-                }
-            };
-            Thread bitmapLoaderThread = new Thread() {
-                @Override
-                public void run() {
-                    Bitmap drawable = image.getBitmap(transformedWidth, transformedHeight);
-                    Message message = bitmapHandler.obtainMessage(1, drawable);
-                    bitmapHandler.sendMessage(message);
-                }
-            };
-            bitmapLoaderThread.start();
+            view.setImage(image.getSrc(), image.getBitmap(transformedWidth, transformedHeight));
         }
 
         if (view instanceof AdaptableSlideViewInterface) {
