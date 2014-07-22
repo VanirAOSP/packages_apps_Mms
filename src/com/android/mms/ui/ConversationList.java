@@ -535,6 +535,10 @@ public class ConversationList extends ListActivity implements DraftCache.OnDraft
         if (item != null) {
             item.setVisible((mListAdapter.getCount() > 0) && mIsSmsEnabled);
         }
+        item = menu.findItem(R.id.action_mark_all_as_unread);
+        if (item != null) {
+            item.setVisible((mListAdapter.getCount() > 0) && mIsSmsEnabled);
+        }
         item = menu.findItem(R.id.action_compose_new);
         if (item != null ){
             // Dim compose if SMS is disabled because it will not work (will show a toast)
@@ -575,6 +579,11 @@ public class ConversationList extends ListActivity implements DraftCache.OnDraft
             case R.id.action_delete_all:
                 // The invalid threadId of -1 means all threads here.
                 confirmDeleteThread(-1L, mQueryHandler);
+                break;
+            case R.id.action_mark_all_as_unread:
+                final MarkAsUnreadThreadListener listener = new MarkAsUnreadThreadListener(
+                        null, mQueryHandler, this);
+                confirmMarkAsUnreadDialog(listener, null, this);
                 break;
             case R.id.action_settings:
                 Intent intent = new Intent(this, MessagingPreferenceActivity.class);
@@ -869,12 +878,11 @@ public class ConversationList extends ListActivity implements DraftCache.OnDraft
                     PduHeaders.READ_STATUS__DELETED_WITHOUT_BEING_READ, new Runnable() {
                 @Override
                 public void run() {
-                    int token = MARK_CONVERSATION_UNREAD_TOKEN;
                     if (mThreadIds == null) {
-                        Conversation.startMarkAsUnreadAll(mContext,mHandler, token);
+                        Conversation.startMarkAsUnreadAll(mContext, mHandler);
                         DraftCache.getInstance().refresh();
                     } else {
-                        Conversation.startMarkAsUnread(mContext,mHandler, token, mThreadIds);
+                        Conversation.startMarkAsUnread(mContext, mHandler, mThreadIds);
                     }
                 }
             });
@@ -1122,9 +1130,10 @@ public class ConversationList extends ListActivity implements DraftCache.OnDraft
 
                 case R.id.markAsUnread:
                     if (mSelectedThreadIds.size() > 0) {
-                        confirmMarkAsUnreadDialog(new MarkAsUnreadThreadListener(mSelectedThreadIds, mQueryHandler,
-                        ConversationList.this), mSelectedThreadIds,
-                        ConversationList.this);
+                        final MarkAsUnreadThreadListener listener = new MarkAsUnreadThreadListener(
+                                mSelectedThreadIds, mQueryHandler,ConversationList.this);
+                        confirmMarkAsUnreadDialog(listener, mSelectedThreadIds,
+                                ConversationList.this);
                     }
                     mode.finish();
                     break;
