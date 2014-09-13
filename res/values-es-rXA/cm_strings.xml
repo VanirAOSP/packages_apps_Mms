@@ -122,4 +122,5 @@
   <string name="menu_conversation_options">Opciones de conversación</string>
   <string name="pref_title_reset_convopt_to_default">Restablecer valores</string>
   <string name="pref_summary_reset_convopt_to_default">Reafitar los axustes de conversación a los axustes de nivel d\'aplicación</string>
+  <string name="failed_open_associated_activity_msg">Fallu al abrir l\'actividá asociada</string>
 </resources>

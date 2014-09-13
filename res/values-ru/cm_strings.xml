@@ -122,4 +122,5 @@
   <string name="menu_conversation_options">Свойства диалога</string>
   <string name="pref_title_reset_convopt_to_default">Сбросить настройки</string>
   <string name="pref_summary_reset_convopt_to_default">Восстановить настройки диалога на используемые для всех контактов</string>
+  <string name="failed_open_associated_activity_msg">Не удалось запустить требуемое приложение</string>
 </resources>

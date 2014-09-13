@@ -122,4 +122,5 @@
   <string name="menu_conversation_options">대화 옵션</string>
   <string name="pref_title_reset_convopt_to_default">기본값으로 재설정</string>
   <string name="pref_summary_reset_convopt_to_default">대화 설정을 앱 수준 설정으로 재설정</string>
+  <string name="failed_open_associated_activity_msg">연결된 액티비티를 열지 못했습니다</string>
 </resources>
