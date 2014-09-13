@@ -122,4 +122,5 @@
   <string name="menu_conversation_options">Beszélgetés beállítások</string>
   <string name="pref_title_reset_convopt_to_default">Beállítások visszaállítása alaphelyzetbe</string>
   <string name="pref_summary_reset_convopt_to_default">Visszaállítja a beszélgetés beállításokat az alkalmazáson belüli alapbeállításokra</string>
+  <string name="failed_open_associated_activity_msg">Nem sikerült megnyitni a kapcsolódó tevékenységet</string>
 </resources>

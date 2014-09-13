@@ -24,6 +24,7 @@
   <string name="toast_sending_message">正在傳送訊息</string>
   <string name="qm_quick_reply">回覆</string>
   <string name="qm_mark_read">已讀</string>
+  <string name="message_counter">%2$d 中的 %1$d</string>
   <string name="pref_title_notification_privacy_mode_enabled">私隱模式</string>
   <string name="pref_summary_notification_privacy_mode_enabled">隱藏狀態列中的寄件者和訊息並停用「快速回覆」</string>
   <string name="notification_single_title_privacy_mode">新訊息</string>
@@ -86,6 +87,7 @@
   <string name="alert_dialog_yes">是</string>
   <string name="alert_dialog_no">否</string>
   <string name="menu_as_unread">標記為未讀</string>
+  <string name="menu_all_as_unread">全部標為未讀</string>
   <string name="confirm_mark_unread_dialog_title">標記為未讀？</string>
   <string name="confirm_mark_unread_conversation">談話將被標記為未讀。</string>
   <string name="confirm_mark_unread_all_conversations">所有的主題將被標記為未讀。 </string>
@@ -115,4 +117,7 @@
   <string name="menu_insert_smiley">插入表情符號</string>
   <string name="pref_title_enable_emoticons">表情符號支援</string>
   <string name="pref_summary_enable_emoticons">用等同的圖形來替代文字表情符號</string>
+  <string name="normal_show">查看正常模式</string>
+  <string name="cannot_play">無法顯示幻燈片。</string>
+  <string name="pref_title_reset_convopt_to_default">重設為預設值</string>
 </resources>

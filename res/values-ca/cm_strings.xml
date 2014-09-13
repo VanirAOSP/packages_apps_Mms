@@ -122,4 +122,5 @@
   <string name="menu_conversation_options">Opcions de conversa</string>
   <string name="pref_title_reset_convopt_to_default">Restableix als valors per defecte</string>
   <string name="pref_summary_reset_convopt_to_default">Restableix la configuració de conversa a la configuració a nivell d\'aplicació</string>
+  <string name="failed_open_associated_activity_msg">No s\'ha pogut obrir l\'activitat associada</string>
 </resources>

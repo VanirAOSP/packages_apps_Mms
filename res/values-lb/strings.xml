@@ -48,6 +48,7 @@
   <string name="delete_thread">Diskussioun läschen</string>
   <string name="menu_forward">Weiderleeden</string>
   <string name="inline_subject">"&lt;Sujet: <xliff:g id="subject">%s</xliff:g>&gt;"</string>
+  <string name="insufficient_drm_rights">Net genuch DRM-Rechter detektéiert.</string>
   <string name="message_options">Messagenoptiounen</string>
   <string name="done">Fäerdeg</string>
   <string name="slide_show_part">Deel <xliff:g id="part">%1$s</xliff:g>/<xliff:g id="total">%2$s</xliff:g></string>
