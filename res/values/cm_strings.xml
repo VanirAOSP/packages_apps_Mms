@@ -195,4 +195,24 @@
 
     <!-- Failed to open associated activity -->
     <string name="failed_open_associated_activity_msg">Failed to open associated activity</string>
+
+    <!-- Address to display when message is a cell broadcast on channel 50 or 60  -->
+    <string name="cell_broadcast_sender">Cell broadcast channel</string>
+
+    <!-- Disk Storage Full Error Notification dialog text. -->
+    <string name="disk_storage_full_error">Error: Storage is full.</string>
+
+    <string name="system_audio_item">System audio</string>
+    <string name="external_audio_item">External audio</string>
+
+    <string name="pending_mms_title">Pending MMS on other subscription</string>
+    <string name="pending_mms">Messaging: One or more MMS are pending</string>
+    <string name="pending_mms_text">Touch to switch the subscription</string>
+
+    <string name="abort_mms">Messaging: Abort MMS</string>
+    <string name="abort_mms_text">Touch to abort and switch back</string>
+
+    <string name="progress_mms_title">MMS transaction on other sub in progress</string>
+    <string name="progress_mms">Messaging: MMS in progress\u2026</string>
+    <string name="progress_mms_text">Touch to retry</string>
 </resources>
