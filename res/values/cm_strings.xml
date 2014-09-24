@@ -75,7 +75,6 @@
     <string name="template_insert_hint">Insert here the template text</string>
     <string name="template_empty_text">Text field cannot be empty</string>
     <string name="template_save">Save</string>
-    <string name="template_ctx_menu_title">Actions</string>
     <string name="template_edit">Edit</string>
     <string name="template_delete">Delete</string>
     <string name="template_list_title">Templates</string>
@@ -143,7 +142,6 @@
     <string name="menu_all_as_unread">Mark all as unread</string>
     <!-- Confirm Mark as unread -->
     <string name="confirm_mark_unread_dialog_title">Mark as unread?</string>
-    <string name="confirm_mark_unread_conversation">The conversation will be marked as unread.</string>
     <!-- Mark all threads confirmation dialog message -->
     <string name="confirm_mark_unread_all_conversations">All threads will be marked as unread.</string>
 
@@ -185,7 +183,6 @@
     <string name="pref_summary_enable_emoticons">Substitute text emoticons with graphical equivalents</string>
 
     <!-- Used in MobilePaperShowActivity -->
-    <string name="normal_show">View normal mode</string>
     <string name="cannot_play">Cannot present the slide show.</string>
 
     <!-- Conversation options -->
@@ -195,4 +192,24 @@
 
     <!-- Failed to open associated activity -->
     <string name="failed_open_associated_activity_msg">Failed to open associated activity</string>
+
+    <!-- Address to display when message is a cell broadcast on channel 50 or 60  -->
+    <string name="cell_broadcast_sender">Cell broadcast channel</string>
+
+    <!-- Disk Storage Full Error Notification dialog text. -->
+    <string name="disk_storage_full_error">Error: Storage is full.</string>
+
+    <string name="system_audio_item">System audio</string>
+    <string name="external_audio_item">External audio</string>
+
+    <string name="pending_mms_title">Pending MMS on other subscription</string>
+    <string name="pending_mms">Messaging: One or more MMS are pending</string>
+    <string name="pending_mms_text">Touch to switch the subscription</string>
+
+    <string name="abort_mms">Messaging: Abort MMS</string>
+    <string name="abort_mms_text">Touch to abort and switch back</string>
+
+    <string name="progress_mms_title">MMS transaction on other sub in progress</string>
+    <string name="progress_mms">Messaging: MMS in progress\u2026</string>
+    <string name="progress_mms_text">Touch to retry</string>
 </resources>
