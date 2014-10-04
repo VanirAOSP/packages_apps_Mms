@@ -120,4 +120,16 @@
   <string name="pref_title_reset_convopt_to_default">Restaurer les valeurs par défaut</string>
   <string name="pref_summary_reset_convopt_to_default">Réinitialise le paramètre de conversation à celui de l\'application</string>
   <string name="failed_open_associated_activity_msg">Impossible d\'ouvrir l\'activité associé</string>
+  <string name="cell_broadcast_sender">Canal de diffusion cellulaire</string>
+  <string name="disk_storage_full_error">Erreur : Le stockage est plein.</string>
+  <string name="system_audio_item">Audio système</string>
+  <string name="external_audio_item">Audio externe</string>
+  <string name="pending_mms_title">MMS en attente sur un autre abonnement</string>
+  <string name="pending_mms">Messagerie : un ou plusieurs MMS sont en attente</string>
+  <string name="pending_mms_text">Appuyez pour changer d\'abonnement</string>
+  <string name="abort_mms">Messagerie : Abandon du MMS</string>
+  <string name="abort_mms_text">Appuyez pour abandonner et revenir en arrière</string>
+  <string name="progress_mms_title">Transaction MMS sur un autre abonnement en cours</string>
+  <string name="progress_mms">Messagerie : MMS en cours\u2026</string>
+  <string name="progress_mms_text">Appuyez pour réessayer</string>
 </resources>
