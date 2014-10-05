@@ -120,4 +120,16 @@
   <string name="pref_title_reset_convopt_to_default">Atkurti į numatytuosius</string>
   <string name="pref_summary_reset_convopt_to_default">Atkuria pokalbio nustatymą į programos lygio parametrą</string>
   <string name="failed_open_associated_activity_msg">Nepavyko atidaryti susijusios veiklos</string>
+  <string name="cell_broadcast_sender">Mobiliojo transliavimo kanalas</string>
+  <string name="disk_storage_full_error">Klaida: atmintinė pilna.</string>
+  <string name="system_audio_item">Sistemos garsas</string>
+  <string name="external_audio_item">Išorinis garsas</string>
+  <string name="pending_mms_title">Laukia MMS kitoje prenumeratoje</string>
+  <string name="pending_mms">Pranešimai: laukia vienas ar daugiau MMS</string>
+  <string name="pending_mms_text">Palieskite, kad įjungtumėte prenumeratą</string>
+  <string name="abort_mms">Pranešimai: nutraukti MMS</string>
+  <string name="abort_mms_text">Palieskite, kad nutraukti ir gryžti atgal</string>
+  <string name="progress_mms_title">MMS operacija vykdoma kitoje paskyroje</string>
+  <string name="progress_mms">Pranešimai: vykdoma MMS\u2026</string>
+  <string name="progress_mms_text">Palieskite ir bandykite dar kartą</string>
 </resources>
