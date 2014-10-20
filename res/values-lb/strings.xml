@@ -85,7 +85,7 @@
   <string name="all_threads">All d\'Konversatiounen</string>
   <string name="type_to_compose_text_enter_to_send">Message schreiwen</string>
   <string name="open_keyboard_to_compose_message">Tastatur opmaachen, fir e Message ze schreiwen</string>
-  <string name="sending_disabled_not_default_app">Schécken deaktivéiert</string>
+  <string name="sending_disabled_not_default_app">Schécken desaktivéiert</string>
   <string name="compose_disabled_toast">Schreiwen ass net méiglich, well et net deng Standard-SMS-App ass.</string>
   <string name="compressing">Bild ass ze grouss. Gëtt kompriméiert\u2026</string>
   <string name="unsupported_media_format">Format <xliff:g id="name">%1$s</xliff:g> ass net ënnerstëtzt.</string>
@@ -157,7 +157,7 @@
   <string name="pref_mms_settings_title">"Multimediamessagen (MMS)"</string>
   <string name="pref_sms_settings_title">"Kuerzmessagen (SMS)"</string>
   <string name="pref_sms_storage_title">Späicher</string>
-  <string name="pref_title_sms_disabled">SMS Deaktivéiert</string>
+  <string name="pref_title_sms_disabled">SMS Desaktivéiert</string>
   <string name="pref_summary_sms_disabled">Dréck, fir Messagen als Standard-SMS-App festzeleeën</string>
   <string name="pref_title_sms_enabled">SMS Aktivéiert</string>
   <string name="pref_summary_sms_enabled">Dréck, fir d\'Standard-SMS-App z\'änneren</string>
