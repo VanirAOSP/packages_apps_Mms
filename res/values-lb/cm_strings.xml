@@ -21,7 +21,6 @@
   <string name="button_view">Ukucken</string>
   <string name="button_templates">Virlagen</string>
   <string name="qm_quick_reply">Äntweren</string>
-  <string name="qm_mark_read">Liesen</string>
   <string name="message_counter">%1$d / %2$d</string>
   <string name="notification_single_title_privacy_mode">Neie Message</string>
   <string name="notification_multiple_title_privacy_mode">Nei Messagen</string>
@@ -40,9 +39,27 @@
   <string name="template_confirm_dialog_title">Läschen?</string>
   <string name="select_template">Virlagen auswielen</string>
   <string name="pref_extra_settings">Weider Astellungen</string>
+  <string name="blacklist_title">Schwaarz Lëscht</string>
+  <string name="blacklist_summary_disabled">Desaktivéiert</string>
+  <string name="add_to_blacklist">Op d\'schwaarz Lëscht setzen</string>
   <string name="alert_dialog_yes">Jo</string>
   <string name="alert_dialog_no">Nee</string>
   <string name="menu_as_unread">Als ongelies markéieren</string>
   <string name="menu_all_as_unread">All als ongelies markéieren</string>
   <string name="confirm_mark_unread_dialog_title">Als ongelies markéieren?</string>
+  <string name="select_recipients">Empfänger auswielen</string>
+  <string name="groups_header">Gruppen</string>
+  <string name="no_recipients">Keng Kontakter fonnt</string>
+  <string name="menu_done">Fäerdeg</string>
+  <string name="menu_mobile">Just mobil Nummeren</string>
+  <string name="menu_groups">Gruppen uweisen</string>
+  <string name="send_delay_3seconds">3 Sekonnen</string>
+  <string name="send_delay_5seconds">5 Sekonnen</string>
+  <string name="send_delay_10seconds">10 Sekonnen</string>
+  <string name="send_delay_20seconds">20 Sekonnen</string>
+  <string name="send_delay_30seconds">30 Sekonnen</string>
+  <string name="sent_countdown">Zäit bis zum Verschécken</string>
+  <string name="pref_mms_notification_vibrate_normal">Normal</string>
+  <string name="pref_mms_notification_vibrate_med_vib">Mëttel Vibratioun</string>
+  <string name="pref_mms_notification_vibrate_long_vib">Laang Vibratioun</string>
 </resources>
