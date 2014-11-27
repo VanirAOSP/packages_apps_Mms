@@ -83,7 +83,7 @@
   <string name="blacklist_summary">Els missatges entrants dels números de telèfon a la llista negra seran bloquejats</string>
   <string name="add_to_blacklist">Afegeix a la llista negra</string>
   <string name="add_to_blacklist_message">Els missatges futurs de %s seran bloquejats</string>
-  <string name="alert_dialog_yes">Si</string>
+  <string name="alert_dialog_yes">Sí</string>
   <string name="alert_dialog_no">No</string>
   <string name="menu_as_unread">Marca\'l com a sense llegir</string>
   <string name="menu_all_as_unread">Marcal\'s tots com sense llegir</string>
