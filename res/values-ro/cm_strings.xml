@@ -17,7 +17,7 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="menu_add_to_calendar">Adaugă la calendar</string>
-  <string name="button_close">Închideți</string>
+  <string name="button_close">Închide</string>
   <string name="button_view">Vizualizați</string>
   <string name="button_templates">Șabloane</string>
   <string name="type_to_reply_text_enter_to_send">Introduceți text pentru a răspunde</string>
@@ -110,8 +110,8 @@
   <string name="pref_mms_notification_vibrate_normal">Normal</string>
   <string name="pref_mms_notification_vibrate_med_vib">Vibrare medie</string>
   <string name="pref_mms_notification_vibrate_long_vib">Vibrare lungă</string>
-  <string name="pref_mms_notification_vibrate_mult_short">Mai multe scurt</string>
-  <string name="pref_mms_notification_vibrate_mult_long">Mai multe lung</string>
+  <string name="pref_mms_notification_vibrate_mult_short">Mai multe și scurte</string>
+  <string name="pref_mms_notification_vibrate_mult_long">Mai multe și prelungite</string>
   <string name="menu_insert_smiley">Inserați un emoticon</string>
   <string name="pref_title_enable_emoticons">Suport emoticoane</string>
   <string name="pref_summary_enable_emoticons">Substituie emoticoanele text cu echivalentele grafice</string>
@@ -119,4 +119,16 @@
   <string name="menu_conversation_options">Opțiuni conversație</string>
   <string name="pref_title_reset_convopt_to_default">Resetare la valori implicite</string>
   <string name="pref_summary_reset_convopt_to_default">Resetează setările conversațiilor la setările de nivel de aplicație</string>
+  <string name="failed_open_associated_activity_msg">Nu s-a reuşit să se deschidă activitatea asociată</string>
+  <string name="disk_storage_full_error">Eroare: Spațiul de stocare este plin.</string>
+  <string name="system_audio_item">Sistem audio</string>
+  <string name="external_audio_item">Audio Extern</string>
+  <string name="pending_mms_title">MMS în curs pe alt abonament</string>
+  <string name="pending_mms">Mesagerie: Unul sau mai multe MMS sunt în așteptare</string>
+  <string name="pending_mms_text">Atingeţi pentru a comuta abonamentul</string>
+  <string name="abort_mms">Mesagerie: Abandonare MMS</string>
+  <string name="abort_mms_text">Atingeţi pentru a abandona și a comuta înapoi</string>
+  <string name="progress_mms_title">Tranzacție MMS în curs pe alt abonament</string>
+  <string name="progress_mms">Mesagerie:: MMS în curs\u2026</string>
+  <string name="progress_mms_text">Atingeţi pentru a reîncerca</string>
 </resources>

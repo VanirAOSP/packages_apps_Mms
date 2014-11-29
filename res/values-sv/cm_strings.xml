@@ -119,4 +119,8 @@
   <string name="menu_conversation_options">Konversationsalternativ</string>
   <string name="pref_title_reset_convopt_to_default">Återställ till standard</string>
   <string name="pref_summary_reset_convopt_to_default">Återställer konversationsinställningarna till standard på applikationsnivå</string>
+  <string name="disk_storage_full_error">Fel: Lagringsutrymmet är fullt.</string>
+  <string name="system_audio_item">Systemljud</string>
+  <string name="external_audio_item">Externt ljud</string>
+  <string name="progress_mms_text">Tryck för att försöka igen</string>
 </resources>
