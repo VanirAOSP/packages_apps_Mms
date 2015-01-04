@@ -465,6 +465,10 @@
 
         <receiver android:name=".quickmessage.ClearAllReceiver" />
 
+        <receiver
+            android:name=".quickmessage.QmMarkRead"
+            android:exported="true" />
+
         <!-- Message Template Content Provider -->
         <provider android:name="MessageTemplateProvider"
                 android:authorities="com.android.mms.MessageTemplateProvider" />
