@@ -1282,13 +1282,13 @@ public class MessagingNotification {
             CharSequence callText = context.getText(R.string.menu_call);
             Intent callIntent = new Intent(Intent.ACTION_CALL);
             callIntent.setData(mostRecentNotification.mSender.getPhoneUri());
-            PendingIntent mCallPendingIntent = PendingIntent.getActivity(context, 0, callIntent,
+            PendingIntent callPendingIntent = PendingIntent.getActivity(context, 0, callIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
-            noti.addAction(R.drawable.ic_menu_call, callText, mCallPendingIntent);
+            noti.addAction(R.drawable.ic_menu_call, callText, callPendingIntent);
 
             //Wearable
             noti.extend(wearableExtender.addAction( new NotificationCompat.Action.Builder(
-                R.drawable.ic_menu_call, callText, mCallPendingIntent).build()));
+                R.drawable.ic_menu_call, callText, callPendingIntent).build()));
 
             //Set up remote input
             String replyLabel = context.getString(R.string.qm_wear_voice_reply);
