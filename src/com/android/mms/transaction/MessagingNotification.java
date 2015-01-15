@@ -1315,7 +1315,7 @@ public class MessagingNotification {
                                context.getString(R.string.qm_wear_reply_by_voice),
                                voiceReplyPendingIntent).addRemoteInput(remoteInput).build();
             noti.extend(wearableExtender.addAction(action));
-            noti.addAction(R.drawable.ic_menu_call, callText, mCallPendingIntent);
+            noti.addAction(R.drawable.ic_menu_call, callText, callPendingIntent);
         }
 
         if (messageCount == 1) {
