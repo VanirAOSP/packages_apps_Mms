@@ -13,6 +13,7 @@ src_dirs := src $(contacts_common_dir)/src $(phone_common_dir)/src
 $(shell rm -f $(LOCAL_PATH)/chips)
 
 LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE_PATH := $(TARGET_OUT_DATA_APPS)
 
 LOCAL_SRC_FILES := $(call all-java-files-under, $(src_dirs))
 LOCAL_RESOURCE_DIR := $(addprefix $(LOCAL_PATH)/, $(res_dirs))
